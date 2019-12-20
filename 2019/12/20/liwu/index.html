@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans,en,default">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python - project - text,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Rick Zhang" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="介绍最近看有主播进行礼物的手动统计，感觉实在是有点费功夫于是尝试提升效率。首先在下实在不熟悉API，并且TCP了解的也比较肤浅，所以打算更具每次直播聊天的文本进行提取信息来统计礼物数。 具体实践顺序1. 查看文本格式格式如上所示。由于直播方正好开了礼物感谢的方式，每一次收礼物都能进行文本抓取。但是里面有一些比较特殊的礼物格式，例如下图。由于送礼物会出现连击的现象，在短时间内送出多个相同的礼物会出现">
+<meta name="keywords" content="Python - project - text">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python douyu 礼物统计">
+<meta property="og:url" content="http://zhanglinfeng09.com/2019/12/20/liwu/index.html">
+<meta property="og:site_name" content="Rick Zhang">
+<meta property="og:description" content="介绍最近看有主播进行礼物的手动统计，感觉实在是有点费功夫于是尝试提升效率。首先在下实在不熟悉API，并且TCP了解的也比较肤浅，所以打算更具每次直播聊天的文本进行提取信息来统计礼物数。 具体实践顺序1. 查看文本格式格式如上所示。由于直播方正好开了礼物感谢的方式，每一次收礼物都能进行文本抓取。但是里面有一些比较特殊的礼物格式，例如下图。由于送礼物会出现连击的现象，在短时间内送出多个相同的礼物会出现">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://res.cloudinary.com/djyodckal/image/upload/v1576809787/31576809495_.pic_hd_nhzean.png">
+<meta property="og:image" content="https://res.cloudinary.com/djyodckal/image/upload/v1576810007/41576809989_.pic_hd_izzax5.jpg">
+<meta property="og:image" content="http://zhanglinfeng09.com/2019/12/20/liwu/%20https://res.cloudinary.com/djyodckal/image/upload/v1576810240/61576810220_.pic_xt0x06.jpg">
+<meta property="og:image" content="https://res.cloudinary.com/djyodckal/image/upload/v1576811179/71576811153_.pic_hd_lp9y00.jpg">
+<meta property="og:updated_time" content="2019-12-20T03:41:49.479Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python douyu 礼物统计">
+<meta name="twitter:description" content="介绍最近看有主播进行礼物的手动统计，感觉实在是有点费功夫于是尝试提升效率。首先在下实在不熟悉API，并且TCP了解的也比较肤浅，所以打算更具每次直播聊天的文本进行提取信息来统计礼物数。 具体实践顺序1. 查看文本格式格式如上所示。由于直播方正好开了礼物感谢的方式，每一次收礼物都能进行文本抓取。但是里面有一些比较特殊的礼物格式，例如下图。由于送礼物会出现连击的现象，在短时间内送出多个相同的礼物会出现">
+<meta name="twitter:image" content="https://res.cloudinary.com/djyodckal/image/upload/v1576809787/31576809495_.pic_hd_nhzean.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zhanglinfeng09.com/2019/12/20/liwu/">
+
+
+
+
+
+  <title>python douyu 礼物统计 | Rick Zhang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Rick Zhang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">little by little</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+<script type="text/javascript">
+    // Wait for the page to load first
+    var _prevOnload = window.onload;
+    window.onload = function() {
+        var switchLang = document.getElementById("menu").getElementsByClassName("menu-item-switch_lang")[0].childNodes[0];
+            var href = window.location.href;
+            var indexOfEn = href.toLowerCase().indexOf('/en/');
+            if(indexOfEn !== -1) {
+                switchLang.href = href.replace('/en/', '/');
+            }
+            else {
+                switchLang.href = href.replace(/(^http[s]?:\/\/[a-z0-9.]*[:?0-9]*\/)(.*)/i, '$1en/$2');
+            }
+    }
+</script>
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://zhanglinfeng09.com/2019/12/20/liwu/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Rick Zhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/Profilepic.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rick Zhang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">python douyu 礼物统计</h2>
+        
+
+        <div class="post-meta">
+	  
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-20T10:28:20+08:00">
+                2019-12-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python-text/" itemprop="url" rel="index">
+                    <span itemprop="name">python text</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 浏览
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.4k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  12
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>最近看有主播进行礼物的手动统计，感觉实在是有点费功夫于是尝试提升效率。首先在下实在不熟悉API，并且TCP了解的也比较肤浅，所以打算更具每次直播聊天的文本进行提取信息来统计礼物数。</p>
+<h2 id="具体实践顺序"><a href="#具体实践顺序" class="headerlink" title="具体实践顺序"></a>具体实践顺序</h2><h3 id="1-查看文本格式"><a href="#1-查看文本格式" class="headerlink" title="1. 查看文本格式"></a>1. 查看文本格式</h3><p><img src="https://res.cloudinary.com/djyodckal/image/upload/v1576809787/31576809495_.pic_hd_nhzean.png" alt><br>格式如上所示。由于直播方正好开了礼物感谢的方式，每一次收礼物都能进行文本抓取。<br>但是里面有一些比较特殊的礼物格式，例如下图。<br><img src="https://res.cloudinary.com/djyodckal/image/upload/v1576810007/41576809989_.pic_hd_izzax5.jpg" alt><br>由于送礼物会出现连击的现象，在短时间内送出多个相同的礼物会出现连击的效果。其实只有六次而不是1+2+…+6次。但是又不能根据每一次连击效果进行简单的礼物数加一，因为存在一次性送礼物，并且不同的礼物类型会有不同的选项。</p>
+<h4 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h4><p>如果能赠送办卡会有如下的选项。<br><img src="%20https://res.cloudinary.com/djyodckal/image/upload/v1576810240/61576810220_.pic_xt0x06.jpg" alt><br>x10，x66, x366,x520,x1314等选项。<br>所以存在一次叠加超过一次的情况。</p>
+<h3 id="2-查看需要抓取的格式"><a href="#2-查看需要抓取的格式" class="headerlink" title="2. 查看需要抓取的格式"></a>2. 查看需要抓取的格式</h3><p>根据前面几幅图，礼物送出后有如下体现。<br>【主播 ID】： 感谢。【送礼者ID】  送出的 【礼物类型】x【数量】<br>就可以根据简单的正则表达式进行抓取。但是由于是中文的原因，折腾了一个小时，包括文本log文件的转码（因为在mac上显示全是乱码），包括正则表达式中的乱码，最后还包括送礼者ID的群魔乱舞，可能包含各种特殊符号或文字。</p>
+<h3 id="3-完整编码"><a href="#3-完整编码" class="headerlink" title="3. 完整编码"></a>3. 完整编码</h3><p>完整代码如下<br>`python<br>import re<br>import os<br>import time<br>import codecs<br>def find_liwu():<br>    filename = os.listdir(‘logfile’)<br>    filepath = []<br>    for element in filename:<br>        if len(element.split(‘.txt’)) &gt;= 2:<br>            #print element<br>            filepath.append(element)<br>    feiji = ‘飞机’<br>    banka = ‘办卡’<br>    i = 0<br>    bankadic = {}<br>    feijidic = {}<br>    g = 0<br>    num = [0]<br>    patternbanka = unicode(‘感谢 ‘,’utf8’,errors=’ignore’)+u’[\u4e00-\u9fa5\d\w]+’+unicode(‘ 送出的 ‘,’utf8’,errors=’ignore’)+unicode(banka,’utf8’,errors=’ignore’)+’[x][\d]+’<br>    patternfeiji = unicode(‘感谢 ‘, ‘utf8’, errors=’ignore’) + u’[\u4e00-\u9fa5\d\w]+’ + unicode(‘ 送出的 ‘, ‘utf8’,errors=’ignore’) + unicode(feiji, ‘utf8’, errors=’ignore’) + ‘[x][\d]+’<br>    while i &lt; len(filepath):<br>        path = ‘logfile/‘ + filepath[i]<br>        with open(path) as f:<br>            loglines = f.read().splitlines()<br>        j = 0<br><br>        while j &lt; len(loglines):<br>            line = unicode(loglines[j], “utf8”, errors=”ignore”)<br>            answer = re.findall(patternbanka,line)<br>            answer1 = re.findall(patternfeiji,line)<br>            #print(answer)<br>            if answer:<br>                #print len(answer)<br>                g += 1<br>                #print(answer[0])<br>                prev = int(num[0])<br>                patternName = u’(?P<name>[\u4e00-\u9fa5\d\w]+)’+unicode(‘ 送出的 ‘,’utf8’,errors=’ignore’)<br>                name = re.findall(patternName,answer[0])<br>                patternNum = unicode(banka,’utf8’,errors=’ignore’)+’<a href="?P<num>[\d]+">x</a>‘<br>                num = re.findall(patternNum,answer[0])<br>                num1 = int(num[0])<br>                #print name[0], num1, prev<br>                if name[0] in bankadic.keys():<br>                    if num1 == 1:<br>                        bankadic[name[0]] = bankadic[name[0]] + 1<br>                    elif num1 == 10 and prev != 9:<br>                        bankadic[name[0]] = bankadic[name[0]] + 10<br>                    elif num1 == 66 and prev != 65:<br>                        bankadic[name[0]] = bankadic[name[0]] + 66<br>                    elif num1 == 366 and prev != 365:<br>                        bankadic[name[0]] = bankadic[name[0]] + 366<br>                    elif num1 == 520 and prev != 519:<br>                        bankadic[name[0]] = bankadic[name[0]] + 520<br>                    elif num1 == 1314 and prev != 1313:<br>                        bankadic[name[0]] = bankadic[name[0]] + 1314<br>                    else:<br>                        bankadic[name[0]] = bankadic[name[0]] + 1<br>                else:<br>                    bankadic[name[0]] = num1<br>            if answer1:<br>                #print len(answer)<br>                g += 1<br>                #print(answer[0])<br>                prev = int(num[0])<br>                patternName = u’(?P<name>[\u4e00-\u9fa5\d\w]+)’+unicode(‘ 送出的 ‘,’utf8’,errors=’ignore’)<br>                name = re.findall(patternName,answer1[0])<br>                patternNum = unicode(feiji,’utf8’,errors=’ignore’)+’<a href="?P<num>[\d]+">x</a>‘<br>                num = re.findall(patternNum,answer1[0])<br>                num1 = int(num[0])<br>                #print name[0], num1, prev<br>                if name[0] in feijidic.keys():<br>                    if num1 == 1:<br>                        feijidic[name[0]] = feijidic[name[0]] + 1<br>                    elif num1 == 10 and prev != 9:<br>                        feijidic[name[0]] = feijidic[name[0]] + 10<br>                    elif num1 == 66 and prev != 65:<br>                        feijidic[name[0]] = feijidic[name[0]] + 66<br>                    elif num1 == 366 and prev != 365:<br>                        feijidic[name[0]] = feijidic[name[0]] + 366<br>                    elif num1 == 520 and prev != 519:<br>                        feijidic[name[0]] = feijidic[name[0]] + 520<br>                    elif num1 == 1314 and prev != 1313:<br>                        feijidic[name[0]] = feijidic[name[0]] + 1314<br>                    else:<br>                        feijidic[name[0]] = feijidic[name[0]] + 1<br>                else:<br>                    feijidic[name[0]] = num1<br>            j+= 1<br>        i += 1<br>    #print bankadic.keys()[1], bankadic[bankadic.keys()[1]]<br>    #print feijidic<br>    f = codecs.open(‘liwu.txt’,’w’,’utf-8’)<br>    #print bankadic.keys()[0]<br>    i = 0<br>    while i &lt; (len(bankadic)):<br>        if bankadic.keys()[i] in feijidic.keys():<br>            f.write(bankadic.keys()[i] + ‘ ‘+ str(bankadic[bankadic.keys()[i]])+unicode(‘ 办卡 ‘,’utf8’,errors=’ignore’)+ str(feijidic[bankadic.keys()[i]])+ unicode(‘ 飞机’,’utf8’,errors=’ignore’) +unicode(‘ 价值 ‘,’utf8’,errors=’ignore’)+ str(bankadic[bankadic.keys()[i]]<em>6+feijidic[bankadic.keys()[i]]</em>100)+ ‘ ‘’\n’)<br>        else:<br>            f.write(bankadic.keys()[i] + ‘ ‘+ str(bankadic[bankadic.keys()[i]])+unicode(‘ 办卡’,’utf8’,errors=’ignore’)+  unicode(‘ 0  飞机’,’utf8’,errors=’ignore’)+unicode(‘ 价值 ‘,’utf8’,errors=’ignore’)+ str(bankadic[bankadic.keys()[i]]<em>6) +’\n’)<br>        i += 1<br>    i = 0<br>    while i &lt; (len(feijidic)):<br>        if feijidic.keys()[i] in bankadic.keys():<br>            f.write(feijidic.keys()[i] + ‘ ‘+ str(bankadic[feijidic.keys()[i]])+ unicode(‘ 办卡 ‘,’utf8’,errors=’ignore’)+ str(feijidic[feijidic.keys()[i]])+unicode(‘ 飞机 ‘,’utf8’,errors=’ignore’) +unicode(‘ 价值 ‘,’utf8’,errors=’ignore’)+ str(bankadic[feijidic.keys()[i]]</em>6+feijidic[feijidic.keys()[i]]<em>100)+’\n’)<br>        else:<br>            f.write(feijidic.keys()[i] + ‘ ‘+ unicode(‘ 0 办卡 ‘,’utf8’,errors=’ignore’)+ str(feijidic[feijidic.keys()[i]])+unicode(‘ 飞机’,’utf8’,errors=’ignore’)  +unicode(‘ 价值 ‘,’utf8’,errors=’ignore’)+ str(feijidic[feijidic.keys()[i]]</em>100) +’\n’)<br>        i += 1</name></name></p>
+<p>if <strong>name</strong> == “<strong>main</strong>“:<br>    start_time = time.time()<br>    a = find_liwu()<br>    #a = ‘x5’<br>    #pattern = r’[x][\d]’<br>    #a2=re.findall(pattern,a)<br><br><br><br><br>    print(“— %s seconds —“ % (time.time() - start_time))<br>    filename = os.listdir(‘logfile’)</p>
+<h4 id="4-结果输出"><a href="#4-结果输出" class="headerlink" title="4. 结果输出"></a>4. 结果输出</h4><p><img src="https://res.cloudinary.com/djyodckal/image/upload/v1576811179/71576811153_.pic_hd_lp9y00.jpg" alt><br>这篇文本中的所有ID都能抓取到，连 xxx丶xx格式的ID也能抓取所以抓取的面应该是比较广的。</p>
+<h4 id="5-GUI-界面"><a href="#5-GUI-界面" class="headerlink" title="5. GUI 界面"></a>5. GUI 界面</h4><h5 id="介绍-1"><a href="#介绍-1" class="headerlink" title="介绍"></a>介绍</h5><p>由于是给新手用的，所以打算建立一个GUI互动界面。结果做完了才想起来，新手甚至没有python和GUI的库，所以应该运行不了。。。<br>在pyqt4中进行了UI的绘制，再通过pyqt5 BasicUI.ui -o BasicUI.py 进行转换。</p>
+<h5 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h5><p>UI源文件<br>python</p>
+<h1 id="coding-utf-8"><a href="#coding-utf-8" class="headerlink" title="-- coding: utf-8 --"></a>-<em>- coding: utf-8 -</em>-</h1><h1 id="Form-implementation-generated-from-reading-ui-file-‘liwu-ui’"><a href="#Form-implementation-generated-from-reading-ui-file-‘liwu-ui’" class="headerlink" title="Form implementation generated from reading ui file ‘liwu.ui’"></a>Form implementation generated from reading ui file ‘liwu.ui’</h1><p>#</p>
+<h1 id="Created-by-PyQt5-UI-code-generator-5-7-1"><a href="#Created-by-PyQt5-UI-code-generator-5-7-1" class="headerlink" title="Created by: PyQt5 UI code generator 5.7.1"></a>Created by: PyQt5 UI code generator 5.7.1</h1><p>#</p>
+<h1 id="WARNING-All-changes-made-in-this-file-will-be-lost"><a href="#WARNING-All-changes-made-in-this-file-will-be-lost" class="headerlink" title="WARNING! All changes made in this file will be lost!"></a>WARNING! All changes made in this file will be lost!</h1><p>from PyQt5 import QtCore, QtGui, QtWidgets</p>
+<p>class Ui_MainWindow(object):<br>    def setupUi(self, MainWindow):<br>        MainWindow.setObjectName(“MainWindow”)<br>        MainWindow.resize(800, 600)<br>        self.centralwidget = QtWidgets.QWidget(MainWindow)<br>        self.centralwidget.setObjectName(“centralwidget”)<br>        self.pushButton = QtWidgets.QPushButton(self.centralwidget)<br>        self.pushButton.setGeometry(QtCore.QRect(350, 240, 92, 27))<br>        self.pushButton.setObjectName(“pushButton”)<br>        MainWindow.setCentralWidget(self.centralwidget)<br>        self.menubar = QtWidgets.QMenuBar(MainWindow)<br>        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 25))<br>        self.menubar.setObjectName(“menubar”)<br>        MainWindow.setMenuBar(self.menubar)<br>        self.statusbar = QtWidgets.QStatusBar(MainWindow)<br>        self.statusbar.setObjectName(“statusbar”)<br>        MainWindow.setStatusBar(self.statusbar)</p>
+<pre><code>    self.retranslateUi(MainWindow)
+    QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+def retranslateUi(self, MainWindow):
+    _translate = QtCore.QCoreApplication.translate
+    MainWindow.setWindowTitle(_translate(&quot;MainWindow&quot;, &quot;MainWindow&quot;))
+    self.pushButton.setText(_translate(&quot;MainWindow&quot;, &quot;liwu&quot;))</code></pre><p>以及UI的引用文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#coding:utf8</span></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> codecs</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> PyQt5.QtWidgets <span class="keyword">import</span> QMainWindow, QApplication, QFileDialog</span><br><span class="line"><span class="keyword">from</span> liwu <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment">#from pyparsing import unicode</span></span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> unicode</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#######################################################</span></span><br><span class="line"><span class="comment">#   Author:     &lt;Your Full Name&gt;</span></span><br><span class="line"><span class="comment">#   email:      &lt;Your Email&gt;</span></span><br><span class="line"><span class="comment">#   ID:         &lt;Your course ID, e.g. ee364j20&gt;</span></span><br><span class="line"><span class="comment">#   Date:       &lt;Start Date&gt;</span></span><br><span class="line"><span class="comment">#######################################################</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Consumer</span><span class="params">(QMainWindow, Ui_MainWindow)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, parent=None)</span>:</span></span><br><span class="line">        super(Consumer, self).__init__(parent)</span><br><span class="line">        self.setupUi(self)</span><br><span class="line">        self.pushButton.clicked.connect(self.find_liwu)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">find_liwu</span><span class="params">(self)</span>:</span></span><br><span class="line">        filename = os.listdir(<span class="string">'logfile'</span>)</span><br><span class="line">        filepath = []</span><br><span class="line">        <span class="keyword">for</span> element <span class="keyword">in</span> filename:</span><br><span class="line">            <span class="keyword">if</span> len(element.split(<span class="string">'.txt'</span>)) &gt;= <span class="number">2</span>:</span><br><span class="line">                <span class="comment">#print element</span></span><br><span class="line">                filepath.append(element)</span><br><span class="line">        feiji = <span class="string">'飞机'</span></span><br><span class="line">        banka = <span class="string">'办卡'</span></span><br><span class="line">        i = <span class="number">0</span></span><br><span class="line">        bankadic = &#123;&#125;</span><br><span class="line">        feijidic = &#123;&#125;</span><br><span class="line">        g = <span class="number">0</span></span><br><span class="line">        num = [<span class="number">0</span>]</span><br><span class="line">        patternbanka = str(<span class="string">'感谢 '</span>)+<span class="string">u'[\u4e00-\u9fa5\d\w]+'</span>+str(<span class="string">' 送出的 '</span>)+str(banka)+<span class="string">'[x][\d]+'</span></span><br><span class="line">        patternfeiji = str(<span class="string">'感谢 '</span>) + <span class="string">u'[\u4e00-\u9fa5\d\w]+'</span> + str(<span class="string">' 送出的 '</span>) + str(feiji) + <span class="string">'[x][\d]+'</span></span><br><span class="line">        <span class="keyword">while</span> i &lt; len(filepath):</span><br><span class="line">            path = <span class="string">'logfile/'</span> + filepath[i]</span><br><span class="line">            <span class="keyword">with</span> open(path) <span class="keyword">as</span> f:</span><br><span class="line">                loglines = f.read().splitlines()</span><br><span class="line">            j = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span> j &lt; len(loglines):</span><br><span class="line">                line = str(loglines[j])</span><br><span class="line">                answer = re.findall(patternbanka,line)</span><br><span class="line">                answer1 = re.findall(patternfeiji,line)</span><br><span class="line">                <span class="comment">#print(answer)</span></span><br><span class="line">                <span class="keyword">if</span> answer:</span><br><span class="line">                <span class="comment">#print len(answer)</span></span><br><span class="line">                    g += <span class="number">1</span></span><br><span class="line">                    <span class="comment">#print(answer[0])</span></span><br><span class="line">                    prev = int(num[<span class="number">0</span>])</span><br><span class="line">                    patternName = <span class="string">u'(?P&lt;name&gt;[\u4e00-\u9fa5\d\w]+)'</span>+str(<span class="string">' 送出的 '</span>)</span><br><span class="line">                    name = re.findall(patternName,answer[<span class="number">0</span>])</span><br><span class="line">                    patternNum = str(banka)+<span class="string">'[x](?P&lt;num&gt;[\d]+)'</span></span><br><span class="line">                    num = re.findall(patternNum,answer[<span class="number">0</span>])</span><br><span class="line">                    num1 = int(num[<span class="number">0</span>])</span><br><span class="line">                    <span class="comment">#print name[0], num1, prev</span></span><br><span class="line">                    <span class="keyword">if</span> name[<span class="number">0</span>] <span class="keyword">in</span> bankadic.keys():</span><br><span class="line">                        <span class="keyword">if</span> num1 == <span class="number">1</span>:</span><br><span class="line">                            bankadic[name[<span class="number">0</span>]] = bankadic[name[<span class="number">0</span>]] + <span class="number">1</span></span><br><span class="line">                        <span class="keyword">elif</span> num1 == <span class="number">10</span> <span class="keyword">and</span> prev != <span class="number">9</span>:</span><br><span class="line">                            bankadic[name[<span class="number">0</span>]] = bankadic[name[<span class="number">0</span>]] + <span class="number">10</span></span><br><span class="line">                        <span class="keyword">elif</span> num1 == <span class="number">66</span> <span class="keyword">and</span> prev != <span class="number">65</span>:</span><br><span class="line">                            bankadic[name[<span class="number">0</span>]] = bankadic[name[<span class="number">0</span>]] + <span class="number">66</span></span><br><span class="line">                        <span class="keyword">elif</span> num1 == <span class="number">366</span> <span class="keyword">and</span> prev != <span class="number">365</span>:</span><br><span class="line">                            bankadic[name[<span class="number">0</span>]] = bankadic[name[<span class="number">0</span>]] + <span class="number">366</span></span><br><span class="line">                        <span class="keyword">elif</span> num1 == <span class="number">520</span> <span class="keyword">and</span> prev != <span class="number">519</span>:</span><br><span class="line">                            bankadic[name[<span class="number">0</span>]] = bankadic[name[<span class="number">0</span>]] + <span class="number">520</span></span><br><span class="line">                        <span class="keyword">elif</span> num1 == <span class="number">1314</span> <span class="keyword">and</span> prev != <span class="number">1313</span>:</span><br><span class="line">                            bankadic[name[<span class="number">0</span>]] = bankadic[name[<span class="number">0</span>]] + <span class="number">1314</span></span><br><span class="line">                        <span class="keyword">else</span>:</span><br><span class="line">                            bankadic[name[<span class="number">0</span>]] = bankadic[name[<span class="number">0</span>]] + <span class="number">1</span></span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        bankadic[name[<span class="number">0</span>]] = num1</span><br><span class="line">                <span class="keyword">if</span> answer1:</span><br><span class="line">                    <span class="comment">#print len(answer)</span></span><br><span class="line">                    g += <span class="number">1</span></span><br><span class="line">                    <span class="comment">#print(answer[0])</span></span><br><span class="line">                    prev = int(num[<span class="number">0</span>])</span><br><span class="line">                    patternName = <span class="string">u'(?P&lt;name&gt;[\u4e00-\u9fa5\d\w]+)'</span>+str(<span class="string">' 送出的 '</span>)</span><br><span class="line">                    name = re.findall(patternName,answer1[<span class="number">0</span>])</span><br><span class="line">                    patternNum = str(feiji)+<span class="string">'[x](?P&lt;num&gt;[\d]+)'</span></span><br><span class="line">                    num = re.findall(patternNum,answer1[<span class="number">0</span>])</span><br><span class="line">                    num1 = int(num[<span class="number">0</span>])</span><br><span class="line">                    <span class="comment">#print(name,num)</span></span><br><span class="line">                    <span class="comment">#print name[0], num1, prev</span></span><br><span class="line">                    <span class="keyword">if</span> name[<span class="number">0</span>] <span class="keyword">in</span> feijidic.keys():</span><br><span class="line">                        <span class="keyword">if</span> num1 == <span class="number">1</span>:</span><br><span class="line">                            feijidic[name[<span class="number">0</span>]] = feijidic[name[<span class="number">0</span>]] + <span class="number">1</span></span><br><span class="line">                        <span class="keyword">elif</span> num1 == <span class="number">10</span> <span class="keyword">and</span> prev != <span class="number">9</span>:</span><br><span class="line">                            feijidic[name[<span class="number">0</span>]] = feijidic[name[<span class="number">0</span>]] + <span class="number">10</span></span><br><span class="line">                        <span class="keyword">elif</span> num1 == <span class="number">66</span> <span class="keyword">and</span> prev != <span class="number">65</span>:</span><br><span class="line">                            feijidic[name[<span class="number">0</span>]] = feijidic[name[<span class="number">0</span>]] + <span class="number">66</span></span><br><span class="line">                        <span class="keyword">elif</span> num1 == <span class="number">366</span> <span class="keyword">and</span> prev != <span class="number">365</span>:</span><br><span class="line">                            feijidic[name[<span class="number">0</span>]] = feijidic[name[<span class="number">0</span>]] + <span class="number">366</span></span><br><span class="line">                        <span class="keyword">elif</span> num1 == <span class="number">520</span> <span class="keyword">and</span> prev != <span class="number">519</span>:</span><br><span class="line">                            feijidic[name[<span class="number">0</span>]] = feijidic[name[<span class="number">0</span>]] + <span class="number">520</span></span><br><span class="line">                        <span class="keyword">elif</span> num1 == <span class="number">1314</span> <span class="keyword">and</span> prev != <span class="number">1313</span>:</span><br><span class="line">                            feijidic[name[<span class="number">0</span>]] = feijidic[name[<span class="number">0</span>]] + <span class="number">1314</span></span><br><span class="line">                        <span class="keyword">else</span>:</span><br><span class="line">                            feijidic[name[<span class="number">0</span>]] = feijidic[name[<span class="number">0</span>]] + <span class="number">1</span></span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        feijidic[name[<span class="number">0</span>]] = num1</span><br><span class="line">                j+= <span class="number">1</span></span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">        <span class="comment">#print(bankadic.keys()[1], bankadic[bankadic.keys()[1]])</span></span><br><span class="line">        print(feijidic)</span><br><span class="line">        f = codecs.open(<span class="string">'liwu.txt'</span>,<span class="string">'w'</span>,<span class="string">'utf-8'</span>)</span><br><span class="line">        <span class="comment">#print bankadic.keys()[0]</span></span><br><span class="line">        i = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> i &lt; (len(bankadic)):</span><br><span class="line">            <span class="keyword">if</span> list(bankadic.keys())[i] <span class="keyword">in</span> feijidic.keys():</span><br><span class="line">                f.write(list(bankadic.keys())[i] + <span class="string">' '</span>+ str(bankadic[list(bankadic.keys())[i]])+str(<span class="string">' 办卡 '</span>)+ str(feijidic[list(bankadic.keys())[i]])+ str(<span class="string">' 飞机'</span>) +<span class="string">'\n'</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                f.write(list(bankadic.keys())[i] + <span class="string">' '</span>+ str(bankadic[list(bankadic.keys())[i]])+str(<span class="string">' 办卡'</span>)+  str(<span class="string">' 0  飞机'</span>) +<span class="string">'\n'</span>)</span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">        i = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> i &lt; (len(feijidic)):</span><br><span class="line">            <span class="keyword">if</span> list(feijidic.keys())[i] <span class="keyword">in</span> bankadic.keys():</span><br><span class="line">                f.write(list(feijidic.keys())[i] + <span class="string">' '</span>+ str(bankadic[list(feijidic.keys())[i]])+ str(<span class="string">' 办卡 '</span>)+ str(feijidic[list(feijidic.keys())[i]])+str(<span class="string">' 飞机 '</span>) +<span class="string">'\n'</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                f.write(list(feijidic.keys())[i] + <span class="string">' '</span>+ str(<span class="string">' 0 办卡 '</span>)+ str(feijidic[list(feijidic.keys())[i]])+str(<span class="string">' 飞机'</span>)  +<span class="string">'\n'</span>)</span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    currentApp = QApplication(sys.argv)</span><br><span class="line">    currentForm = Consumer()</span><br><span class="line"></span><br><span class="line">    currentForm.show()</span><br><span class="line">    currentApp.exec_()</span><br></pre></td></tr></table></figure>
+
+<h3 id="总结与问题"><a href="#总结与问题" class="headerlink" title="总结与问题"></a>总结与问题</h3><p>这个程序大概上能实现功能但是会遇到一下问题。</p>
+<h4 id="1-礼物数量"><a href="#1-礼物数量" class="headerlink" title="1.礼物数量"></a>1.礼物数量</h4><p>如果送了9张办卡后 再送了10张办卡，可能只统计10张。因为程序猜测后面的x10为连击，因为x10前面为x9。这个问题可以用文本读取的方式不能有效解决。</p>
+<p>可能可以用连击的时间来减少误算，但是再连击时间内发生还是无法避免。</p>
+<h4 id="2-送礼者ID"><a href="#2-送礼者ID" class="headerlink" title="2.送礼者ID"></a>2.送礼者ID</h4><p>如果送礼者ID不为汉子英文和数字的话，有大几率会出现遗漏。</p>
+<h4 id="3-程序使用"><a href="#3-程序使用" class="headerlink" title="3.程序使用"></a>3.程序使用</h4><p>该程序还是只能在搭建了环境下才能运行，较为麻烦。</p>
+<h4 id="4-不同版本的python下转码的函数不通用"><a href="#4-不同版本的python下转码的函数不通用" class="headerlink" title="4.不同版本的python下转码的函数不通用"></a>4.不同版本的python下转码的函数不通用</h4><p>在3.7中只能支持str（）进行转码。encode（）好像不支持。</p>
+<h4 id="5-时间"><a href="#5-时间" class="headerlink" title="5.时间"></a>5.时间</h4><p>在处理一个文本花的时间为0.0143s，所以时间应该问题不是很大。</p>
+<h4 id="6-市面上已经有免费的支持API的网站进行查询"><a href="#6-市面上已经有免费的支持API的网站进行查询" class="headerlink" title="6.市面上已经有免费的支持API的网站进行查询"></a>6.市面上已经有免费的支持API的网站进行查询</h4><p>所以本程序在得知这个消息的时候就不怎么打算更新了。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:20px;">--------------end---------------
+    
+</div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python-project-text/" rel="tag"># Python - project - text</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/06/Linux_driver_practice/" rel="next" title="Linux驱动练习">
+                <i class="fa fa-chevron-left"></i> Linux驱动练习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </div></article>
+
+
+
+    <div class="post-spread">
+      
+        
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
+    <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a class="bds_count" data-cmd="count"></a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "share": {
+        "bdSize": "16",
+        "bdStyle": "0"
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div id="gitalk-container"></div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/Profilepic.png" alt="Rick Zhang">
+            
+              <p class="site-author-name" itemprop="name">Rick Zhang</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Zhang-Rick" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:908520243@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体实践顺序"><span class="nav-number">2.</span> <span class="nav-text">具体实践顺序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-查看文本格式"><span class="nav-number">2.1.</span> <span class="nav-text">1. 查看文本格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#举例"><span class="nav-number">2.1.1.</span> <span class="nav-text">举例</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-查看需要抓取的格式"><span class="nav-number">2.2.</span> <span class="nav-text">2. 查看需要抓取的格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-完整编码"><span class="nav-number">2.3.</span> <span class="nav-text">3. 完整编码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-结果输出"><span class="nav-number">2.3.1.</span> <span class="nav-text">4. 结果输出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-GUI-界面"><span class="nav-number">2.3.2.</span> <span class="nav-text">5. GUI 界面</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#介绍-1"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#代码"><span class="nav-number">2.3.2.2.</span> <span class="nav-text">代码</span></a></li></ol></li></ol></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#coding-utf-8"><span class="nav-number"></span> <span class="nav-text">-- coding: utf-8 --</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Form-implementation-generated-from-reading-ui-file-‘liwu-ui’"><span class="nav-number"></span> <span class="nav-text">Form implementation generated from reading ui file ‘liwu.ui’</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Created-by-PyQt5-UI-code-generator-5-7-1"><span class="nav-number"></span> <span class="nav-text">Created by: PyQt5 UI code generator 5.7.1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#WARNING-All-changes-made-in-this-file-will-be-lost"><span class="nav-number"></span> <span class="nav-text">WARNING! All changes made in this file will be lost!</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#总结与问题"><span class="nav-number">0.1.</span> <span class="nav-text">总结与问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-礼物数量"><span class="nav-number">0.1.1.</span> <span class="nav-text">1.礼物数量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-送礼者ID"><span class="nav-number">0.1.2.</span> <span class="nav-text">2.送礼者ID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-程序使用"><span class="nav-number">0.1.3.</span> <span class="nav-text">3.程序使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-不同版本的python下转码的函数不通用"><span class="nav-number">0.1.4.</span> <span class="nav-text">4.不同版本的python下转码的函数不通用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-时间"><span class="nav-number">0.1.5.</span> <span class="nav-text">5.时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-市面上已经有免费的支持API的网站进行查询"><span class="nav-number">0.1.6.</span> <span class="nav-text">6.市面上已经有免费的支持API的网站进行查询</span></a></li></ol></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+<div class="copyright">&copy; 2019.8 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rick Zhang</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">9.2k</span>
+  
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>次
+</span>
+</div>
+
+<span class="post-meta-divider">|</span>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 访问总量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '32187f180424de683f61',
+          clientSecret: '8401191f8959de99b84a02f9a407595a163936c9',
+          repo: 'Zhang-Rick.github.io',
+          owner: 'Zhang-Rick',
+          admin: ['Zhang-Rick'],
+          id: location.pathname,
+          distractionFreeMode: 'false'
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
