@@ -91,7 +91,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://res.cloudinary.com/djyodckal/image/upload/v1584759605/datapath_jchv0c.png">
 <meta property="og:image" content="https://res.cloudinary.com/djyodckal/image/upload/v1584760463/registerDiagram_djizyf.png">
-<meta property="og:updated_time" content="2020-03-21T03:15:28.611Z">
+<meta property="og:updated_time" content="2020-03-21T11:21:20.420Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="singlecycle设计及实现">
 <meta name="twitter:description" content="简介这篇博文主要介绍的是基于mips的 singlecycle CPU设计及实现。 RTL 图像因为刚开始写的时候只考虑了mips最基础的指令，没有考虑lui和跳转等指令，所以这是一个非常粗略的图像。主要由几个大块组成，register file寄存器，ALU算术逻辑单元，memory储存，control unit控制单元，instruction fetch指令获取单元，PC 程序计数器和deco">
@@ -370,7 +370,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  171
+                  304
                 </span>
               
 
@@ -409,7 +409,9 @@
       
         <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>这篇博文主要介绍的是基于mips的 singlecycle CPU设计及实现。</p>
 <h3 id="RTL-图像"><a href="#RTL-图像" class="headerlink" title="RTL 图像"></a>RTL 图像</h3><p><img src="https://res.cloudinary.com/djyodckal/image/upload/v1584759605/datapath_jchv0c.png" alt><br>因为刚开始写的时候只考虑了mips最基础的指令，没有考虑lui和跳转等指令，所以这是一个非常粗略的图像。主要由几个大块组成，register file寄存器，ALU算术逻辑单元，memory储存，control unit控制单元，instruction fetch指令获取单元，PC 程序计数器和decoder。由于decoder已经编写，所以这次设计直接从储存中读取opcode来识别指令，iload来识别各个寄存器的地址。接下来一一介绍每个单元。</p>
-<h4 id="register-file-寄存器"><a href="#register-file-寄存器" class="headerlink" title="register file 寄存器"></a>register file 寄存器</h4><p><img src="https://res.cloudinary.com/djyodckal/image/upload/v1584760463/registerDiagram_djizyf.png" alt></p>
+<h4 id="register-file-寄存器"><a href="#register-file-寄存器" class="headerlink" title="register file 寄存器"></a>register file 寄存器</h4><p><img src="https://res.cloudinary.com/djyodckal/image/upload/v1584760463/registerDiagram_djizyf.png" alt><br>如图所示上图展示了寄存器的一些输入及输出。<br>输入:<br>WDAT(31:0) 32位的输入<br>WSEL(4:0) 寄存器地址选择<br>WEN 寄存器开关 1:开 0:关<br>CLK 寄存器时钟<br>RSEL1(4:0) 数据总线1 地址选择<br>RSEL2(4:0) 数据总线2 地址选择<br>输出:<br>RDAT1(31:0) 数据总线1值<br>RDAT2(31:0) 数据总线2值</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">ifneq ($(KERNELRELEASE),)</span><br><span class="line"></span><br><span class="line">obj-m:=hello_new<span class="variable">.o</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"></span><br><span class="line">#<span class="keyword">generate</span> the path</span><br><span class="line"></span><br><span class="line">CURRENT_PATH:=$(shell pwd)</span><br><span class="line"></span><br><span class="line">#the absolute path</span><br><span class="line"></span><br><span class="line">LINUX_KERNEL_PATH:=/lib/modules/$(shell uname -r)/build</span><br><span class="line">#complie object</span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">    make -C $(LINUX_KERNEL_PATH) M=$(CURRENT_PATH) modules </span><br><span class="line">clean:</span><br><span class="line">    make -C $(LINUX_KERNEL_PATH) M=$(CURRENT_PATH) clean</span><br><span class="line">endif</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -592,7 +594,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -702,7 +704,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">9.3k</span>
+    <span title="Site words total count">9.5k</span>
   
 </div>
 
