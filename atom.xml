@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://zhanglinfeng09.com/"/>
-  <updated>2020-05-22T19:23:05.113Z</updated>
+  <updated>2020-05-22T19:25:16.608Z</updated>
   <id>http://zhanglinfeng09.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://zhanglinfeng09.com/2020/05/23/senior-design/"/>
     <id>http://zhanglinfeng09.com/2020/05/23/senior-design/</id>
     <published>2020-05-22T18:02:26.000Z</published>
-    <updated>2020-05-22T19:23:05.113Z</updated>
+    <updated>2020-05-22T19:25:16.608Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>这个项目主要是实现了一个电子名片的功能。这是个实体电子名片的设计，由一个硅谷工程师微型计算机名片得到灵感。由于设计难度过大，对计算机组成在当时还不熟悉，所以做了较大的改变。</p><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>设计最初打算用micro-python做一个USB接口的优盘，然后插入电脑时，能自动弹开一个像本博客一样的网页。但是由于太过简单，而且多数电脑对自动打开程序，类似病毒的脚本的行为会进行安全措施，这个毕业设计在一开始险些被砍掉。<br>最后改成了如下的需求才给予通过。</p><p>该电子名片在不接入电脑时，能显示所有者的姓名，地址，电话号码，邮箱，地址等文本内容，同时能显示个人头像或者微信二维码等图像。</p><p>当手机靠近该电子名片，并打开任意NFC app能接受预先储存于电子名片内的信息，比如个人简历的PDF或者个人网站域名。</p><p>当电子名片接入电脑时，能出现像正常U盘一样在电脑上访问的磁盘，里面的文件都是只读的权限，同时不能复制，保护用户的个人隐私，并且保证用户的所有权。只有用户或者访问者打开U盘中的UI程序输入正确的密码，才给予写和复制的权限。密码保存在原地，但是被加密。同时改变电子名片显示的信息和图片均可以通过该UI程序进行修改，同时NFC需要发送的内容也可以进行修改。当保存键按下时，信息会自动更新。</p><h4 id="示意图"><a href="#示意图" class="headerlink" title="示意图"></a>示意图</h4><p><img src="https://res.cloudinary.com/djyodckal/image/upload/v1590173169/sketchpng_up0mrk.png" alt></p><h3 id="组成部分"><a href="#组成部分" class="headerlink" title="组成部分"></a>组成部分</h3><p>大容量usb储存：实现U盘功能，同时需要足够储存大小。用到了安卓手机的Micro-SD 卡。<br>黑白墨迹屏幕：显示文本和图片。<br>NFC：发送信息给手机。<br><img src="https://pic4.zhimg.com/80/v2-0d60706e016452b7901ca174755b186b_1440w.jpg" alt></p><h4 id="结构图"><a href="#结构图" class="headerlink" title="结构图"></a>结构图</h4><p><img src="https://res.cloudinary.com/djyodckal/image/upload/v1590173238/blockDia_rntrjc.png" alt></p><h3 id="选择这款屏幕的原因"><a href="#选择这款屏幕的原因" class="headerlink" title="选择这款屏幕的原因"></a>选择这款屏幕的原因</h3><p>因为当初设计的时候需要一个尽量小，且能持续显示的屏幕。所以显示了像kindle一样的墨迹屏，而且该屏幕不需要供电就能维持显示的状态，所以完美符合了需求，再者因为若干墨迹屏中只有这款屏幕的刷新时间在两秒以内，最终就选择了这款产品。</p><h3 id="次级系统1：USB-大容量储存"><a href="#次级系统1：USB-大容量储存" class="headerlink" title="次级系统1：USB 大容量储存"></a>次级系统1：USB 大容量储存</h3><p><img src="https://res.cloudinary.com/djyodckal/image/upload/v1590173358/mass_storage_ocpop6.png" alt></p><h4 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h4><p>该部分用STM32cubeIDE 和STM32MUX 一起完成，打开了USB mass storage然后修改storage_config_if.c中的读写和获取状态方程即可。但是中间一直有个问题，USB和盘符一张无法正确读取，直到让写的方程等到能读到卡的状态后，运行指令才成功，但是需要大概一分钟电脑才能读到磁盘。</p><h3 id="次级系统2：图像处理和Micro-SD卡读写"><a href="#次级系统2：图像处理和Micro-SD卡读写" class="headerlink" title="次级系统2：图像处理和Micro-SD卡读写"></a>次级系统2：图像处理和Micro-SD卡读写</h3><p><img src="https://res.cloudinary.com/djyodckal/image/upload/v1590173357/ImagePro_vdfpdc.png" alt><br><img src="https://res.cloudinary.com/djyodckal/image/upload/v1590173539/flowchart_jonb1v.png" alt></p><h4 id="过程-1"><a href="#过程-1" class="headerlink" title="过程"></a>过程</h4><p>该部分需要读取已经保存在Micro-SD卡中解码的图像的数列及文本，然后改变大小，改变色彩显示模式，最后根据屏幕驱动把图像和文本在屏幕上显示出来。</p><h3 id="次级系统3：UI和NFC模块"><a href="#次级系统3：UI和NFC模块" class="headerlink" title="次级系统3：UI和NFC模块"></a>次级系统3：UI和NFC模块</h3><p><img src="https://res.cloudinary.com/djyodckal/image/upload/v1590173539/UI_lepqzz.png" alt><br><img src="https://res.cloudinary.com/djyodckal/image/upload/v1590173539/NFC_wab78v.png" alt></p><h4 id="过程-2"><a href="#过程-2" class="headerlink" title="过程"></a>过程</h4><p>该部分需要在插入U盘后，有一个可以执行的UI程序，方便用户。同时NFC模块读取SD卡中的相应内容，储存在NFC模块的标签上。</p><h3 id="次级系统4：图像解码"><a href="#次级系统4：图像解码" class="headerlink" title="次级系统4：图像解码"></a>次级系统4：图像解码</h3><p><img src="https://res.cloudinary.com/djyodckal/image/upload/v1590173537/Decoder_hdstmz.png" alt></p><h4 id="过程-3"><a href="#过程-3" class="headerlink" title="过程"></a>过程</h4><p>该部分需要在插入U盘后，有一个可以执行的UI程序，方便用户。同时NFC模块读取SD卡中的相应内容，储存在NFC模块的标签上。</p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>最后nfc的步骤目前只能读取信息还不能写，和主单片机的交互的spi也没有实现。<br>目前就是这样，整张名片成本大概50美元，并且usb大容量储存的相应时间比较久，需要一两分钟，原因还未知。</p><h3 id="Github链接及英文描述"><a href="#Github链接及英文描述" class="headerlink" title="Github链接及英文描述"></a>Github链接及英文描述</h3><p><a href="https://github.com/Zhang-Rick/ECE49022_Senior_Design%0A" target="_blank" rel="noopener">https://github.com/Zhang-Rick/ECE49022_Senior_Design</a><br>演示视频<br><a href="https://www.youtube.com/watch?v=P2ZDCQjS7qo" target="_blank" rel="noopener">https://www.youtube.com/watch?v=P2ZDCQjS7qo</a></p>]]></content>
+    <content type="html"><![CDATA[<h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>这个项目主要是实现了一个电子名片的功能。这是个实体电子名片的设计，由一个硅谷工程师微型计算机名片得到灵感。由于设计难度过大，对计算机组成在当时还不熟悉，所以做了较大的改变。</p><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>设计最初打算用micro-python做一个USB接口的优盘，然后插入电脑时，能自动弹开一个像本博客一样的网页。但是由于太过简单，而且多数电脑对自动打开程序，类似病毒的脚本的行为会进行安全措施，这个毕业设计在一开始险些被砍掉。<br>最后改成了如下的需求才给予通过。</p><p>该电子名片在不接入电脑时，能显示所有者的姓名，地址，电话号码，邮箱，地址等文本内容，同时能显示个人头像或者微信二维码等图像。</p><p>当手机靠近该电子名片，并打开任意NFC app能接受预先储存于电子名片内的信息，比如个人简历的PDF或者个人网站域名。</p><p>当电子名片接入电脑时，能出现像正常U盘一样在电脑上访问的磁盘，里面的文件都是只读的权限，同时不能复制，保护用户的个人隐私，并且保证用户的所有权。只有用户或者访问者打开U盘中的UI程序输入正确的密码，才给予写和复制的权限。密码保存在原地，但是被加密。同时改变电子名片显示的信息和图片均可以通过该UI程序进行修改，同时NFC需要发送的内容也可以进行修改。当保存键按下时，信息会自动更新。</p><h4 id="示意图"><a href="#示意图" class="headerlink" title="示意图"></a>示意图</h4><p><img src="https://res.cloudinary.com/djyodckal/image/upload/v1590173169/sketchpng_up0mrk.png" alt></p><h3 id="组成部分"><a href="#组成部分" class="headerlink" title="组成部分"></a>组成部分</h3><p>大容量usb储存：实现U盘功能，同时需要足够储存大小。用到了安卓手机的Micro-SD 卡。<br>黑白墨迹屏幕：显示文本和图片。<br>NFC：发送信息给手机。<br><img src="https://pic4.zhimg.com/80/v2-0d60706e016452b7901ca174755b186b_1440w.jpg" alt></p><h4 id="结构图"><a href="#结构图" class="headerlink" title="结构图"></a>结构图</h4><p><img src="https://res.cloudinary.com/djyodckal/image/upload/v1590173238/blockDia_rntrjc.png" alt></p><h3 id="选择这款屏幕的原因"><a href="#选择这款屏幕的原因" class="headerlink" title="选择这款屏幕的原因"></a>选择这款屏幕的原因</h3><p>因为当初设计的时候需要一个尽量小，且能持续显示的屏幕。所以显示了像kindle一样的墨迹屏，而且该屏幕不需要供电就能维持显示的状态，所以完美符合了需求，再者因为若干墨迹屏中只有这款屏幕的刷新时间在两秒以内，最终就选择了这款产品。</p><h3 id="次级系统1：USB-大容量储存"><a href="#次级系统1：USB-大容量储存" class="headerlink" title="次级系统1：USB 大容量储存"></a>次级系统1：USB 大容量储存</h3><p><img src="https://res.cloudinary.com/djyodckal/image/upload/v1590173358/mass_storage_ocpop6.png" alt></p><h4 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h4><p>该部分用STM32cubeIDE 和STM32MUX 一起完成，打开了USB mass storage然后修改storage_config_if.c中的读写和获取状态方程即可。但是中间一直有个问题，USB和盘符一张无法正确读取，直到让写的方程等到能读到卡的状态后，运行指令才成功，但是需要大概一分钟电脑才能读到磁盘。</p><h3 id="次级系统2：图像处理和Micro-SD卡读写"><a href="#次级系统2：图像处理和Micro-SD卡读写" class="headerlink" title="次级系统2：图像处理和Micro-SD卡读写"></a>次级系统2：图像处理和Micro-SD卡读写</h3><p><img src="https://res.cloudinary.com/djyodckal/image/upload/v1590173357/ImagePro_vdfpdc.png" alt><br><img src="https://res.cloudinary.com/djyodckal/image/upload/v1590173539/flowchart_jonb1v.png" alt></p><h4 id="过程-1"><a href="#过程-1" class="headerlink" title="过程"></a>过程</h4><p>该部分需要读取已经保存在Micro-SD卡中解码的图像的数列及文本，然后改变大小，改变色彩显示模式，最后根据屏幕驱动把图像和文本在屏幕上显示出来。</p><h3 id="次级系统3：UI和NFC模块"><a href="#次级系统3：UI和NFC模块" class="headerlink" title="次级系统3：UI和NFC模块"></a>次级系统3：UI和NFC模块</h3><p><img src="https://res.cloudinary.com/djyodckal/image/upload/v1590173539/UI_lepqzz.png" alt><br><img src="https://res.cloudinary.com/djyodckal/image/upload/v1590173539/NFC_wab78v.png" alt></p><h4 id="过程-2"><a href="#过程-2" class="headerlink" title="过程"></a>过程</h4><p>该部分需要在插入U盘后，有一个可以执行的UI程序，方便用户。同时NFC模块读取SD卡中的相应内容，储存在NFC模块的标签上。</p><h3 id="次级系统4：图像解码"><a href="#次级系统4：图像解码" class="headerlink" title="次级系统4：图像解码"></a>次级系统4：图像解码</h3><p><img src="https://res.cloudinary.com/djyodckal/image/upload/v1590173537/Decoder_hdstmz.png" alt></p><h4 id="过程-3"><a href="#过程-3" class="headerlink" title="过程"></a>过程</h4><p>该部分需要在插入U盘后，有一个可以执行的UI程序，方便用户。同时NFC模块读取SD卡中的相应内容，储存在NFC模块的标签上。</p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>最后nfc的步骤目前只能读取信息还不能写，和主单片机的交互的spi也没有实现。<br>目前就是这样，整张名片成本大概50美元，并且usb大容量储存的相应时间比较久，需要一两分钟，原因还未知。</p><h3 id="Github链接及英文描述"><a href="#Github链接及英文描述" class="headerlink" title="Github链接及英文描述"></a>Github链接及英文描述</h3><p><a href="https://github.com/Zhang-Rick/ECE49022_Senior_Design" target="_blank" rel="noopener">https://github.com/Zhang-Rick/ECE49022_Senior_Design</a><br>演示视频<br><a href="https://www.youtube.com/watch?v=P2ZDCQjS7qo" target="_blank" rel="noopener">https://www.youtube.com/watch?v=P2ZDCQjS7qo</a></p>]]></content>
     
     <summary type="html">
     
@@ -295,90 +295,6 @@
   </entry>
   
   <entry>
-    <title>STM32 C编程入门记录 Timers(上)</title>
-    <link href="http://zhanglinfeng09.com/2019/08/02/STM32(1)/"/>
-    <id>http://zhanglinfeng09.com/2019/08/02/STM32(1)/</id>
-    <published>2019-08-02T05:59:00.000Z</published>
-    <updated>2019-08-03T07:23:28.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="介绍Tim的用途："><a href="#介绍Tim的用途：" class="headerlink" title="介绍Tim的用途："></a>介绍Tim的用途：</h2><p>在stm32里常常需要用Timer来决定一件事项的频率。最简单的例子，如果想让一个LED灯已一个频率闪烁，就要用Tim来确认频率。那接下来就要介绍一下如何建立一个Tim的计时器。</p><h2 id="过程介绍"><a href="#过程介绍" class="headerlink" title="过程介绍"></a>过程介绍</h2><h3 id="1-选择计时器"><a href="#1-选择计时器" class="headerlink" title="1.选择计时器"></a>1.选择计时器</h3><p>首先在I/Opin中，我们暂时只能设置输入与输出。alternative和analog mode还没有涉及，参照下图。<br><img src="https://img-blog.csdnimg.cn/20190407085943770.jpg" alt="这是stm32 reference book上的内容"><br>首先我们要用一个general-purpose的pin连接到Tim，所以这里就不再是输入与输出的结果，而是alternate function mode。</p><h3 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h3><p>首先打开 I/O port C clock才能给PC中的pin赋值。<br>假设我们要设置PC8为Tim3的启动pin</p><p>RCC-&gt;AHBENR |= RCC_AHBENR_GPIOCEN;//1<br>GPIOC-&gt;MODER &amp;= (3 &lt;&lt;(2  8));//2<br>GPIOC-&gt;MODER |= 2 &lt;&lt;(2 * 8);//3<br>GPIOC-&gt;AFR[1] &amp;= (15&lt;&lt;(48));//4</p><p>1.打开所有GPIOC的pin.<br>2.因为下面要给PC8赋值，所以要先清空原来的数值，否则原来数字或等于10结果可能不为10.ex.10|11=11～=10.<br>3.在上图表格中在moder中一个pin占据两位，moder8在第16位，所以向右移8*2位并赋予二进制10也就是2<br>因为不能改变其他位数上的值所以用“|=”“或”来赋值<br>4.这一步要给把pc8绑定到tim3.<br>需要查datasheet。<br><img src="https://img-blog.csdnimg.cn/20190407091823489.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDA4MDIxMg==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>因为pc8对应的alternate function 只有一个就不需要再次查表来，再查reference book 中AFR的部分。<br><img src="https://img-blog.csdnimg.cn/20190407092049235.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDA4MDIxMg==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>因为PC8中的8大于7，所以它属于AFRH组。又因为PC8只有一个alternate function。<br>所以只有赋予0000就行，也就是～（1111）就行了。<br>至此就把PC8和Tim3channel3关联了。<br>接下来就是如何选择Tim3的一些事项，下篇再讲。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;介绍Tim的用途：&quot;&gt;&lt;a href=&quot;#介绍Tim的用途：&quot; class=&quot;headerlink&quot; title=&quot;介绍Tim的用途：&quot;&gt;&lt;/a&gt;介绍Tim的用途：&lt;/h2&gt;&lt;p&gt;在stm32里常常需要用Timer来决定一件事项的频率。最简单的例子，如果想让一个L
-      
-    
-    </summary>
-    
-      <category term="STM32 TIMER" scheme="http://zhanglinfeng09.com/categories/STM32-TIMER/"/>
-    
-    
-      <category term="C" scheme="http://zhanglinfeng09.com/tags/C/"/>
-    
-      <category term="TIMER" scheme="http://zhanglinfeng09.com/tags/TIMER/"/>
-    
-      <category term="STM32" scheme="http://zhanglinfeng09.com/tags/STM32/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python正则表达式两者取一的表达</title>
-    <link href="http://zhanglinfeng09.com/2019/08/02/python%20(regex_either%20_expression)/"/>
-    <id>http://zhanglinfeng09.com/2019/08/02/python (regex_either _expression)/</id>
-    <published>2019-08-02T05:59:00.000Z</published>
-    <updated>2019-08-03T07:18:03.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>曾经要用正则表达式从.txt或者.dat文本中寻找mac的地址的办法<br>目标数据 2a:3v:5g:3k:3d:6h或者2a-3v-5g-3k-3d-6h<br>可能是由于是16进制，字母不允许大于f。英文字符无视大小写。</p><h4 id="一开始的错误代码"><a href="#一开始的错误代码" class="headerlink" title="一开始的错误代码"></a>一开始的错误代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`<span class="string">"[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2"</span></span><br></pre></td></tr></table></figure><p>`由于这个正则表达式能抓取一些错误的例子。</p><h5 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h5><p> <strong>输入</strong>: 2a-3v:5g-3k:3d:6h<br><strong>输出</strong>: 2a-3v:5g-3k:3d:6h<br>会出现”:”与”-“混用的例子，这些是错误的例子。由于输出的顺序必须和文本出现的顺序一致，所以不能分开来查找，于是就做了如下的修改。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`<span class="string">"(?:[a-fA-F0-9](#)2[:](#)[a-fA-F0-9](#)[:](#)[a-fA-F0-9](#)2[:](#)[a-fA-F0-9](#)2[:](#)[a-fA-F0-9](#)2[:](#)[a-fA-F0-9](#)2|[a-fA-F0-9](#)2[-](#)[a-fA-F0-9](#)[-](#)[a-fA-F0-9](#)2[-](#)[a-fA-F0-9](#)2[-](#)[a-fA-F0-9](#)2[-](#)[a-fA-F0-9](#)2)"</span></span><br></pre></td></tr></table></figure><p>`其中(? |-)表示的是两种只能有一种。要不就是全部：衔接的，要不就是全部-衔接的mac地址表达式。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h1&gt;&lt;p&gt;曾经要用正则表达式从.txt或者.dat文本中寻找mac的地址的办法&lt;br&gt;目标数据 2a:3v:5g:3k:3d:6h或者
-      
-    
-    </summary>
-    
-      <category term="Python Regex" scheme="http://zhanglinfeng09.com/categories/Python-Regex/"/>
-    
-    
-      <category term="Python" scheme="http://zhanglinfeng09.com/tags/Python/"/>
-    
-      <category term="正则表达式" scheme="http://zhanglinfeng09.com/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>STM32 C编程入门记录 Timers(下)</title>
-    <link href="http://zhanglinfeng09.com/2019/08/02/STM32(2)/"/>
-    <id>http://zhanglinfeng09.com/2019/08/02/STM32(2)/</id>
-    <published>2019-08-02T05:59:00.000Z</published>
-    <updated>2019-08-03T07:17:31.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>在上篇文章中讲述了如何把GPIO的端口绑定到TIM上，接下来讲一下如何设置TIM的配置。</p><h2 id="过程总览"><a href="#过程总览" class="headerlink" title="过程总览"></a>过程总览</h2><p>– 设置prescaler（预分频器）<br>– 设置the auto-reload（自动重制）<br>– 设置direction/mode of the counter（计数的方向）<br>– 设置output compare mode（输出选择比较方式）<br>– 打开频道连接到端口<br>– 打开 timer的计数器</p><h3 id="1-预分频器"><a href="#1-预分频器" class="headerlink" title="1.预分频器"></a>1.预分频器</h3><p>预分频器就是重复一个计数轮回的次数。代码表述如下：<br>    TIM3-&gt;PSC = 12000 – 1;//重复轮回的次数为12000，因为是从0 开始的所以0-11999为12000.<br>由于TIM的最大频率是48Mhz，所以要得到想要的频率，就要通过运算得知预分频器和计数的值。<br>下面是公式<br>想要的频率 = 48 000 000 / （（TIM3-&gt;PSC + 1 ）*（TIM3-&gt;ARR + 1 ）</p><p>TIM3-&gt;ARR这个会在接下来进行介绍。</p><h3 id="2-自动重制"><a href="#2-自动重制" class="headerlink" title="2.自动重制"></a>2.自动重制</h3><p>自动重制的值为一个计数器从0数到的值。代表计数器达到这个值以后下一位就会清零。<br><code>TIM3-&gt;ARR = 4000 – 1;</code><br>`和上面的代码结合起来就可以了解到，这两个值和想到得到的TIM频率的乘积就是TIM的最大乘积48Mhz。</p><h3 id="3-计数器初始值"><a href="#3-计数器初始值" class="headerlink" title="3.计数器初始值"></a>3.计数器初始值</h3><p>这个值决定了计数器的开始值，通过改变不同频道的初始值可以让相同事件以不同的时间但是相同的频率运行。<br>    TIM3-&gt;CCR3 = 3456;<br>`当一个完整的频率完成的时候，将会输出一个CK_CNT给输出</p><h3 id="4-输出的模式"><a href="#4-输出的模式" class="headerlink" title="4.输出的模式"></a>4.输出的模式</h3><p>stm32TIM输出的模式大概主要的有8种：通过不同的凡是输出的信号也会有不同。<br>0000: 输出冻结，没有任何事发生。<br>0001: 当CNT（计数比较值）的值等于计数的值，输出将变成高平电压。<br>0010: 当CNT的值（计数比较值）的值等于计数的值，输出将变成低平电压。<br>0011: 当CNT的值（计数比较值）的值等于计数的值，输出将与当前相反。<br>0100: 强制低平电压，且永远不会发生改变。<br>0101: 强制高平电压，且永远不会发生改变。<br>0110: PWM输出模式1，如果计数是往上数的，如果自己当得到的频率的值小于计数的值，高平电压。其他的低平电压。<br>如果计数是往下数的，如果自己当得到的频率的值大于计数的值，高平电压。其他的低平电压<br>0111: PWM输出模式2，如果计数是往上数的，如果自己当得到的频率的值大于等于计数的值，高平电压。其他的低平电压。<br>如果计数是往下数的，如果自己当得到的频率的值大于计数的值，高平电压。其他的低平电压。</p><p>然后模式的选择在输出比较模式的寄存器。<br>代码如下:</p><h5 id="举例：选择0011"><a href="#举例：选择0011" class="headerlink" title="举例：选择0011"></a>举例：选择0011</h5><pre><code>TIM3-&gt;CCMR2 &amp;= TIMCCMR2_OC3M2; //把位数2的值清零，因为有可能先前赋的值没有清零。TIM3-&gt;CCMR2 |= TIM_CCMR2_OC3M_1 | TIM_CCMR2_OC3M_0;//给位数1，0的值清零，因为有可能先前赋的值没有清零。</code></pre><h3 id="5-启动"><a href="#5-启动" class="headerlink" title="5. 启动"></a>5. 启动</h3><p>当上面的配置设置好了以后，就可以启动计数器了，让TIM生效。</p><p>以上就是stm32 TIM功能的介绍及实现。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;在上篇文章中讲述了如何把GPIO的端口绑定到TIM上，接下来讲一下如何设置TIM的配置。&lt;/p&gt;
-&lt;h2 id=&quot;过程总览&quot;&gt;&lt;a href=&quot;#过程总览&quot; class=&quot;headerlink&quot; title=&quot;过程总览&quot;&gt;&lt;/a&gt;过程总览&lt;/h2&gt;&lt;p&gt;– 设置presca
-      
-    
-    </summary>
-    
-      <category term="STM32 TIMER" scheme="http://zhanglinfeng09.com/categories/STM32-TIMER/"/>
-    
-    
-      <category term="STM32" scheme="http://zhanglinfeng09.com/tags/STM32/"/>
-    
-      <category term="C - TIMER" scheme="http://zhanglinfeng09.com/tags/C-TIMER/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Pyqt5 textbox中识别整数与小数无报错办法</title>
     <link href="http://zhanglinfeng09.com/2019/08/02/Pyqt5_whaterever_datatype/"/>
     <id>http://zhanglinfeng09.com/2019/08/02/Pyqt5_whaterever_datatype/</id>
@@ -433,6 +349,90 @@
       <category term="文档" scheme="http://zhanglinfeng09.com/tags/%E6%96%87%E6%A1%A3/"/>
     
       <category term="去空格" scheme="http://zhanglinfeng09.com/tags/%E5%8E%BB%E7%A9%BA%E6%A0%BC/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>STM32 C编程入门记录 Timers(下)</title>
+    <link href="http://zhanglinfeng09.com/2019/08/02/STM32(2)/"/>
+    <id>http://zhanglinfeng09.com/2019/08/02/STM32(2)/</id>
+    <published>2019-08-02T05:59:00.000Z</published>
+    <updated>2019-08-03T07:17:31.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>在上篇文章中讲述了如何把GPIO的端口绑定到TIM上，接下来讲一下如何设置TIM的配置。</p><h2 id="过程总览"><a href="#过程总览" class="headerlink" title="过程总览"></a>过程总览</h2><p>– 设置prescaler（预分频器）<br>– 设置the auto-reload（自动重制）<br>– 设置direction/mode of the counter（计数的方向）<br>– 设置output compare mode（输出选择比较方式）<br>– 打开频道连接到端口<br>– 打开 timer的计数器</p><h3 id="1-预分频器"><a href="#1-预分频器" class="headerlink" title="1.预分频器"></a>1.预分频器</h3><p>预分频器就是重复一个计数轮回的次数。代码表述如下：<br>    TIM3-&gt;PSC = 12000 – 1;//重复轮回的次数为12000，因为是从0 开始的所以0-11999为12000.<br>由于TIM的最大频率是48Mhz，所以要得到想要的频率，就要通过运算得知预分频器和计数的值。<br>下面是公式<br>想要的频率 = 48 000 000 / （（TIM3-&gt;PSC + 1 ）*（TIM3-&gt;ARR + 1 ）</p><p>TIM3-&gt;ARR这个会在接下来进行介绍。</p><h3 id="2-自动重制"><a href="#2-自动重制" class="headerlink" title="2.自动重制"></a>2.自动重制</h3><p>自动重制的值为一个计数器从0数到的值。代表计数器达到这个值以后下一位就会清零。<br><code>TIM3-&gt;ARR = 4000 – 1;</code><br>`和上面的代码结合起来就可以了解到，这两个值和想到得到的TIM频率的乘积就是TIM的最大乘积48Mhz。</p><h3 id="3-计数器初始值"><a href="#3-计数器初始值" class="headerlink" title="3.计数器初始值"></a>3.计数器初始值</h3><p>这个值决定了计数器的开始值，通过改变不同频道的初始值可以让相同事件以不同的时间但是相同的频率运行。<br>    TIM3-&gt;CCR3 = 3456;<br>`当一个完整的频率完成的时候，将会输出一个CK_CNT给输出</p><h3 id="4-输出的模式"><a href="#4-输出的模式" class="headerlink" title="4.输出的模式"></a>4.输出的模式</h3><p>stm32TIM输出的模式大概主要的有8种：通过不同的凡是输出的信号也会有不同。<br>0000: 输出冻结，没有任何事发生。<br>0001: 当CNT（计数比较值）的值等于计数的值，输出将变成高平电压。<br>0010: 当CNT的值（计数比较值）的值等于计数的值，输出将变成低平电压。<br>0011: 当CNT的值（计数比较值）的值等于计数的值，输出将与当前相反。<br>0100: 强制低平电压，且永远不会发生改变。<br>0101: 强制高平电压，且永远不会发生改变。<br>0110: PWM输出模式1，如果计数是往上数的，如果自己当得到的频率的值小于计数的值，高平电压。其他的低平电压。<br>如果计数是往下数的，如果自己当得到的频率的值大于计数的值，高平电压。其他的低平电压<br>0111: PWM输出模式2，如果计数是往上数的，如果自己当得到的频率的值大于等于计数的值，高平电压。其他的低平电压。<br>如果计数是往下数的，如果自己当得到的频率的值大于计数的值，高平电压。其他的低平电压。</p><p>然后模式的选择在输出比较模式的寄存器。<br>代码如下:</p><h5 id="举例：选择0011"><a href="#举例：选择0011" class="headerlink" title="举例：选择0011"></a>举例：选择0011</h5><pre><code>TIM3-&gt;CCMR2 &amp;= TIMCCMR2_OC3M2; //把位数2的值清零，因为有可能先前赋的值没有清零。TIM3-&gt;CCMR2 |= TIM_CCMR2_OC3M_1 | TIM_CCMR2_OC3M_0;//给位数1，0的值清零，因为有可能先前赋的值没有清零。</code></pre><h3 id="5-启动"><a href="#5-启动" class="headerlink" title="5. 启动"></a>5. 启动</h3><p>当上面的配置设置好了以后，就可以启动计数器了，让TIM生效。</p><p>以上就是stm32 TIM功能的介绍及实现。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;在上篇文章中讲述了如何把GPIO的端口绑定到TIM上，接下来讲一下如何设置TIM的配置。&lt;/p&gt;
+&lt;h2 id=&quot;过程总览&quot;&gt;&lt;a href=&quot;#过程总览&quot; class=&quot;headerlink&quot; title=&quot;过程总览&quot;&gt;&lt;/a&gt;过程总览&lt;/h2&gt;&lt;p&gt;– 设置presca
+      
+    
+    </summary>
+    
+      <category term="STM32 TIMER" scheme="http://zhanglinfeng09.com/categories/STM32-TIMER/"/>
+    
+    
+      <category term="STM32" scheme="http://zhanglinfeng09.com/tags/STM32/"/>
+    
+      <category term="C - TIMER" scheme="http://zhanglinfeng09.com/tags/C-TIMER/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>STM32 C编程入门记录 Timers(上)</title>
+    <link href="http://zhanglinfeng09.com/2019/08/02/STM32(1)/"/>
+    <id>http://zhanglinfeng09.com/2019/08/02/STM32(1)/</id>
+    <published>2019-08-02T05:59:00.000Z</published>
+    <updated>2019-08-03T07:23:28.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="介绍Tim的用途："><a href="#介绍Tim的用途：" class="headerlink" title="介绍Tim的用途："></a>介绍Tim的用途：</h2><p>在stm32里常常需要用Timer来决定一件事项的频率。最简单的例子，如果想让一个LED灯已一个频率闪烁，就要用Tim来确认频率。那接下来就要介绍一下如何建立一个Tim的计时器。</p><h2 id="过程介绍"><a href="#过程介绍" class="headerlink" title="过程介绍"></a>过程介绍</h2><h3 id="1-选择计时器"><a href="#1-选择计时器" class="headerlink" title="1.选择计时器"></a>1.选择计时器</h3><p>首先在I/Opin中，我们暂时只能设置输入与输出。alternative和analog mode还没有涉及，参照下图。<br><img src="https://img-blog.csdnimg.cn/20190407085943770.jpg" alt="这是stm32 reference book上的内容"><br>首先我们要用一个general-purpose的pin连接到Tim，所以这里就不再是输入与输出的结果，而是alternate function mode。</p><h3 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h3><p>首先打开 I/O port C clock才能给PC中的pin赋值。<br>假设我们要设置PC8为Tim3的启动pin</p><p>RCC-&gt;AHBENR |= RCC_AHBENR_GPIOCEN;//1<br>GPIOC-&gt;MODER &amp;= (3 &lt;&lt;(2  8));//2<br>GPIOC-&gt;MODER |= 2 &lt;&lt;(2 * 8);//3<br>GPIOC-&gt;AFR[1] &amp;= (15&lt;&lt;(48));//4</p><p>1.打开所有GPIOC的pin.<br>2.因为下面要给PC8赋值，所以要先清空原来的数值，否则原来数字或等于10结果可能不为10.ex.10|11=11～=10.<br>3.在上图表格中在moder中一个pin占据两位，moder8在第16位，所以向右移8*2位并赋予二进制10也就是2<br>因为不能改变其他位数上的值所以用“|=”“或”来赋值<br>4.这一步要给把pc8绑定到tim3.<br>需要查datasheet。<br><img src="https://img-blog.csdnimg.cn/20190407091823489.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDA4MDIxMg==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>因为pc8对应的alternate function 只有一个就不需要再次查表来，再查reference book 中AFR的部分。<br><img src="https://img-blog.csdnimg.cn/20190407092049235.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDA4MDIxMg==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>因为PC8中的8大于7，所以它属于AFRH组。又因为PC8只有一个alternate function。<br>所以只有赋予0000就行，也就是～（1111）就行了。<br>至此就把PC8和Tim3channel3关联了。<br>接下来就是如何选择Tim3的一些事项，下篇再讲。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;介绍Tim的用途：&quot;&gt;&lt;a href=&quot;#介绍Tim的用途：&quot; class=&quot;headerlink&quot; title=&quot;介绍Tim的用途：&quot;&gt;&lt;/a&gt;介绍Tim的用途：&lt;/h2&gt;&lt;p&gt;在stm32里常常需要用Timer来决定一件事项的频率。最简单的例子，如果想让一个L
+      
+    
+    </summary>
+    
+      <category term="STM32 TIMER" scheme="http://zhanglinfeng09.com/categories/STM32-TIMER/"/>
+    
+    
+      <category term="C" scheme="http://zhanglinfeng09.com/tags/C/"/>
+    
+      <category term="TIMER" scheme="http://zhanglinfeng09.com/tags/TIMER/"/>
+    
+      <category term="STM32" scheme="http://zhanglinfeng09.com/tags/STM32/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python正则表达式两者取一的表达</title>
+    <link href="http://zhanglinfeng09.com/2019/08/02/python%20(regex_either%20_expression)/"/>
+    <id>http://zhanglinfeng09.com/2019/08/02/python (regex_either _expression)/</id>
+    <published>2019-08-02T05:59:00.000Z</published>
+    <updated>2019-08-03T07:18:03.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>曾经要用正则表达式从.txt或者.dat文本中寻找mac的地址的办法<br>目标数据 2a:3v:5g:3k:3d:6h或者2a-3v-5g-3k-3d-6h<br>可能是由于是16进制，字母不允许大于f。英文字符无视大小写。</p><h4 id="一开始的错误代码"><a href="#一开始的错误代码" class="headerlink" title="一开始的错误代码"></a>一开始的错误代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`<span class="string">"[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2"</span></span><br></pre></td></tr></table></figure><p>`由于这个正则表达式能抓取一些错误的例子。</p><h5 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h5><p> <strong>输入</strong>: 2a-3v:5g-3k:3d:6h<br><strong>输出</strong>: 2a-3v:5g-3k:3d:6h<br>会出现”:”与”-“混用的例子，这些是错误的例子。由于输出的顺序必须和文本出现的顺序一致，所以不能分开来查找，于是就做了如下的修改。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`<span class="string">"(?:[a-fA-F0-9](#)2[:](#)[a-fA-F0-9](#)[:](#)[a-fA-F0-9](#)2[:](#)[a-fA-F0-9](#)2[:](#)[a-fA-F0-9](#)2[:](#)[a-fA-F0-9](#)2|[a-fA-F0-9](#)2[-](#)[a-fA-F0-9](#)[-](#)[a-fA-F0-9](#)2[-](#)[a-fA-F0-9](#)2[-](#)[a-fA-F0-9](#)2[-](#)[a-fA-F0-9](#)2)"</span></span><br></pre></td></tr></table></figure><p>`其中(? |-)表示的是两种只能有一种。要不就是全部：衔接的，要不就是全部-衔接的mac地址表达式。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h1&gt;&lt;p&gt;曾经要用正则表达式从.txt或者.dat文本中寻找mac的地址的办法&lt;br&gt;目标数据 2a:3v:5g:3k:3d:6h或者
+      
+    
+    </summary>
+    
+      <category term="Python Regex" scheme="http://zhanglinfeng09.com/categories/Python-Regex/"/>
+    
+    
+      <category term="Python" scheme="http://zhanglinfeng09.com/tags/Python/"/>
+    
+      <category term="正则表达式" scheme="http://zhanglinfeng09.com/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
     
   </entry>
   
