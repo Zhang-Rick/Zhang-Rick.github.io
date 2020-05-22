@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[毕业设计]]></title>
     <url>%2F2020%2F05%2F23%2Fsenior-design%2F</url>
-    <content type="text"><![CDATA[起因这个项目主要是实现了一个电子名片的功能。这是个实体电子名片的设计，由一个硅谷工程师微型计算机名片得到灵感。由于设计难度过大，对计算机组成在当时还不熟悉，所以做了较大的改变。 介绍设计最初打算用micro-python做一个USB接口的优盘，然后插入电脑时，能自动弹开一个像本博客一样的网页。但是由于太过简单，而且多数电脑对自动打开程序，类似病毒的脚本的行为会进行安全措施，这个毕业设计在一开始险些被砍掉。最后改成了如下的需求才给予通过。 该电子名片在不接入电脑时，能显示所有者的姓名，地址，电话号码，邮箱，地址等文本内容，同时能显示个人头像或者微信二维码等图像。 当手机靠近该电子名片，并打开任意NFC app能接受预先储存于电子名片内的信息，比如个人简历的PDF或者个人网站域名。 当电子名片接入电脑时，能出现像正常U盘一样在电脑上访问的磁盘，里面的文件都是只读的权限，同时不能复制，保护用户的个人隐私，并且保证用户的所有权。只有用户或者访问者打开U盘中的UI程序输入正确的密码，才给予写和复制的权限。密码保存在原地，但是被加密。同时改变电子名片显示的信息和图片均可以通过该UI程序进行修改，同时NFC需要发送的内容也可以进行修改。当保存键按下时，信息会自动更新。 示意图 组成部分大容量usb储存：实现U盘功能，同时需要足够储存大小。用到了安卓手机的Micro-SD 卡。黑白墨迹屏幕：显示文本和图片。NFC：发送信息给手机。 结构图 选择这款屏幕的原因因为当初设计的时候需要一个尽量小，且能持续显示的屏幕。所以显示了像kindle一样的墨迹屏，而且该屏幕不需要供电就能维持显示的状态，所以完美符合了需求，再者因为若干墨迹屏中只有这款屏幕的刷新时间在两秒以内，最终就选择了这款产品。 次级系统1：USB 大容量储存 过程该部分用STM32cubeIDE 和STM32MUX 一起完成，打开了USB mass storage然后修改storage_config_if.c中的读写和获取状态方程即可。但是中间一直有个问题，USB和盘符一张无法正确读取，直到让写的方程等到能读到卡的状态后，运行指令才成功，但是需要大概一分钟电脑才能读到磁盘。 次级系统2：图像处理和Micro-SD卡读写 过程该部分需要读取已经保存在Micro-SD卡中解码的图像的数列及文本，然后改变大小，改变色彩显示模式，最后根据屏幕驱动把图像和文本在屏幕上显示出来。 次级系统3：UI和NFC模块 过程该部分需要在插入U盘后，有一个可以执行的UI程序，方便用户。同时NFC模块读取SD卡中的相应内容，储存在NFC模块的标签上。 次级系统4：图像解码 过程该部分需要在插入U盘后，有一个可以执行的UI程序，方便用户。同时NFC模块读取SD卡中的相应内容，储存在NFC模块的标签上。 总结最后nfc的步骤目前只能读取信息还不能写，和主单片机的交互的spi也没有实现。目前就是这样，整张名片成本大概50美元，并且usb大容量储存的相应时间比较久，需要一两分钟，原因还未知。 Github链接及英文描述https://github.com/Zhang-Rick/ECE49022_Senior_Design]]></content>
+    <content type="text"><![CDATA[起因这个项目主要是实现了一个电子名片的功能。这是个实体电子名片的设计，由一个硅谷工程师微型计算机名片得到灵感。由于设计难度过大，对计算机组成在当时还不熟悉，所以做了较大的改变。 介绍设计最初打算用micro-python做一个USB接口的优盘，然后插入电脑时，能自动弹开一个像本博客一样的网页。但是由于太过简单，而且多数电脑对自动打开程序，类似病毒的脚本的行为会进行安全措施，这个毕业设计在一开始险些被砍掉。最后改成了如下的需求才给予通过。 该电子名片在不接入电脑时，能显示所有者的姓名，地址，电话号码，邮箱，地址等文本内容，同时能显示个人头像或者微信二维码等图像。 当手机靠近该电子名片，并打开任意NFC app能接受预先储存于电子名片内的信息，比如个人简历的PDF或者个人网站域名。 当电子名片接入电脑时，能出现像正常U盘一样在电脑上访问的磁盘，里面的文件都是只读的权限，同时不能复制，保护用户的个人隐私，并且保证用户的所有权。只有用户或者访问者打开U盘中的UI程序输入正确的密码，才给予写和复制的权限。密码保存在原地，但是被加密。同时改变电子名片显示的信息和图片均可以通过该UI程序进行修改，同时NFC需要发送的内容也可以进行修改。当保存键按下时，信息会自动更新。 示意图 组成部分大容量usb储存：实现U盘功能，同时需要足够储存大小。用到了安卓手机的Micro-SD 卡。黑白墨迹屏幕：显示文本和图片。NFC：发送信息给手机。 结构图 选择这款屏幕的原因因为当初设计的时候需要一个尽量小，且能持续显示的屏幕。所以显示了像kindle一样的墨迹屏，而且该屏幕不需要供电就能维持显示的状态，所以完美符合了需求，再者因为若干墨迹屏中只有这款屏幕的刷新时间在两秒以内，最终就选择了这款产品。 次级系统1：USB 大容量储存 过程该部分用STM32cubeIDE 和STM32MUX 一起完成，打开了USB mass storage然后修改storage_config_if.c中的读写和获取状态方程即可。但是中间一直有个问题，USB和盘符一张无法正确读取，直到让写的方程等到能读到卡的状态后，运行指令才成功，但是需要大概一分钟电脑才能读到磁盘。 次级系统2：图像处理和Micro-SD卡读写 过程该部分需要读取已经保存在Micro-SD卡中解码的图像的数列及文本，然后改变大小，改变色彩显示模式，最后根据屏幕驱动把图像和文本在屏幕上显示出来。 次级系统3：UI和NFC模块 过程该部分需要在插入U盘后，有一个可以执行的UI程序，方便用户。同时NFC模块读取SD卡中的相应内容，储存在NFC模块的标签上。 次级系统4：图像解码 过程该部分需要在插入U盘后，有一个可以执行的UI程序，方便用户。同时NFC模块读取SD卡中的相应内容，储存在NFC模块的标签上。 总结最后nfc的步骤目前只能读取信息还不能写，和主单片机的交互的spi也没有实现。目前就是这样，整张名片成本大概50美元，并且usb大容量储存的相应时间比较久，需要一两分钟，原因还未知。 Github链接及英文描述https://github.com/Zhang-Rick/ECE49022_Senior_Design演示视频https://www.youtube.com/watch?v=P2ZDCQjS7qo]]></content>
       <categories>
         <category>Project</category>
       </categories>
@@ -121,19 +121,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Pyqt5 textbox中识别整数与小数无报错办法]]></title>
-    <url>%2F2019%2F08%2F02%2FPyqt5_whaterever_datatype%2F</url>
-    <content type="text"><![CDATA[要求对如下计算机进行编程。可以是任何输入，但只有整数或者小数，结果才有值。要求无论什么输入都不允许有报错。所以我就用了正则表达式来做。 在查看了calculator.io 转换而来的.py文件的时候 123456789101112`self.edtNumber1 = QtWidgets.QLineEdit(self.centralwidget)self.edtNumber1.setGeometry(QtCore.QRect(70, 50, 146, 27))self.edtNumber1.setObjectName("edtNumber1")self.edtNumber2 = QtWidgets.QLineEdit(self.centralwidget)self.edtNumber2.setGeometry(QtCore.QRect(360, 50, 146, 27))self.edtNumber2.setObjectName("edtNumber2")self.lblNumber1 = QtWidgets.QLabel(self.centralwidget)self.lblNumber1.setGeometry(QtCore.QRect(110, 30, 71, 17))self.lblNumber1.setObjectName("lblNumber1")self.lblNumber2 = QtWidgets.QLabel(self.centralwidget)self.lblNumber2.setGeometry(QtCore.QRect(400, 30, 71, 17))self.lblNumber2.setObjectName("lblNumber2") `得知self.edtNumber1为box1的输入，self.edtNumber2为box2的输入。以下是实现计算器的最终代码 12345678`pattern ='(?P\&lt;number\&gt;[+-] ?[0-9] *[.] [0-9] +)'match=re.search(pattern,self.edtNumber2.text())if match !=None and match["number"] == self.edtNumber2.text():number2 = float(match["number"] )pattern1 ='(?P\&lt;number\&gt;[+-] ?[0-9] +)'match1=re.search(pattern1,self.edtNumber2.text())if match == None and match1 != None and match1["number"] == self.edtNumber2.text():number2 = int(match1["number"] ) 一开始的想法因为要判断小数还是整数，所以先判断数据类型。但是因为用正则表达式的话，满足整数的表达式也能在小数中找到。所以要改变查找整数和小数的顺序。 举例：输入：12.78 12`pattern ='(?P\&lt;number\&gt;[+-] ?[0-9] *[.] [0-9] +)'match=re.search(pattern,self.edtNumber2.text()) `用着整数的正则先查找，匹配如下。输出：==12==.==78==12, 78显然，这是一个小数而不是整数。所以先判断小数，再根据非小数的结果判断是否有整数。所以就有了原先的判断语句。 if match == None and match1 != None： `来找到不符合小数却符合整数的类型。 但是出现了另一个问题就是该方法无法读取正确大的结果如果输入如下 举例1：输入：12.78De输出：==12.78==这不是我们想要的结果。于是就做了如下修改。 if match !=None and match[&quot;number&quot;]== self.edtNumber2.text() `除了满足正则表达式的例子外，不应该有其他任何字符。 举例2：输入：12.78Dematch“number” == 12.78self.edtNumber2.text() == 12.78De(match“number” == self.edtNumber2.text()) == False运用了这个方法后，就不再需要整数与小数先后的办法了。因为不是正确的数据类型的话，在第二个if条件就会出错。最后下面是完整代码 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657`import re import sys from PyQt5 import QtCore, QtGui from PyQt5.QtWidgets import QMainWindow, QApplication,QFileDialogfrom calculator import * class MathConsumer(QMainWindow, Ui_MainWindow):def __init__(self, parent=None): super(MathConsumer, self).__init__(parent) self.setupUi(self) self.btnCalculate.clicked.connect(self.calculate)# self.btnCalculate.clicked.connect(performOperation())# self.lblNumber1 =def calculate(self):number1 = 'E'number2 = 'E'# print(float(self.edtNumber1.text()))self.edtNumber1.text()pattern ='(?P\&lt;number\&gt;[+-]() ?[0-9]() *[.]() [0-9]() +)'match=re.search(pattern,self.edtNumber1.text())if match !=None and match["number"]() == self.edtNumber1.text():number1 = float(match["number"]() )pattern1 ='(?P\&lt;number\&gt;[+-]() ?[0-9]() +)'match1=re.search(pattern1,self.edtNumber1.text())if match == None and match1 != None and match1["number"]() == self.edtNumber1.text():number1 = int(match1["number"]() )pattern ='(?P\&lt;number\&gt;[+-]()?[0-9]() *[.]() [0-9]() +)'match=re.search(pattern,self.edtNumber2.text())if match !=None and match["number"]() == self.edtNumber2.text():number2 = float(match["number"]() )pattern1 ='(?P\&lt;number\&gt;[+-]() ?[0-9]() +)'match1=re.search(pattern1,self.edtNumber2.text())if match == None and match1 != None and match1["number"]() == self.edtNumber2.text():number2 = int(match1["number"]() )if number1 == 'E' or number2 == 'E':self.edtResult.setText("E")else:if self.cboOperation.currentText() == "+":self.edtResult.setText(str(number1 + number2))elif self.cboOperation.currentText() == "*":self.edtResult.setText(str(number1 * number2))elif self.cboOperation.currentText() == "-":self.edtResult.setText(str(number1 - number2))elif self.cboOperation.currentText() == "/":if number2 != 0 or number2 != 0.0:self.edtResult.setText(str(number1 / number2))else:self.edtResult.setText("E")if __name__ == "__main__":currentApp = QApplication(sys.argv)currentForm = MathConsumer()currentForm.show()currentApp.exec_() `]]></content>
-      <categories>
-        <category>Python Regex</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-        <tag>正则表达式</tag>
-        <tag>Pyqt5</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[Python读取文件去掉空格读取数据方法]]></title>
     <url>%2F2019%2F08%2F02%2Fpython(delete_space)%2F</url>
     <content type="text"><![CDATA[读取.txt或者.dat文件然后转成list类型，方便读取数据。list(filter(None,lines[i].split(&#39; &#39;)))[x]`通过把空格替换成None来消除空格，x为数据的列数。]]></content>
@@ -154,9 +141,21 @@
         <category>STM32 TIMER</category>
       </categories>
       <tags>
-        <tag>STM32</tag>
         <tag>C</tag>
         <tag>TIMER</tag>
+        <tag>STM32</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Python正则表达式两者取一的表达]]></title>
+    <url>%2F2019%2F08%2F02%2Fpython%20(regex_either%20_expression)%2F</url>
+    <content type="text"><![CDATA[问题描述曾经要用正则表达式从.txt或者.dat文本中寻找mac的地址的办法目标数据 2a:3v:5g:3k:3d:6h或者2a-3v-5g-3k-3d-6h可能是由于是16进制，字母不允许大于f。英文字符无视大小写。 一开始的错误代码1`"[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2" `由于这个正则表达式能抓取一些错误的例子。 举例 输入: 2a-3v:5g-3k:3d:6h输出: 2a-3v:5g-3k:3d:6h会出现”:”与”-“混用的例子，这些是错误的例子。由于输出的顺序必须和文本出现的顺序一致，所以不能分开来查找，于是就做了如下的修改。 1`"(?:[a-fA-F0-9](#)2[:](#)[a-fA-F0-9](#)[:](#)[a-fA-F0-9](#)2[:](#)[a-fA-F0-9](#)2[:](#)[a-fA-F0-9](#)2[:](#)[a-fA-F0-9](#)2|[a-fA-F0-9](#)2[-](#)[a-fA-F0-9](#)[-](#)[a-fA-F0-9](#)2[-](#)[a-fA-F0-9](#)2[-](#)[a-fA-F0-9](#)2[-](#)[a-fA-F0-9](#)2)" `其中(? |-)表示的是两种只能有一种。要不就是全部：衔接的，要不就是全部-衔接的mac地址表达式。]]></content>
+      <categories>
+        <category>Python Regex</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+        <tag>正则表达式</tag>
       </tags>
   </entry>
   <entry>
@@ -172,15 +171,16 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Python正则表达式两者取一的表达]]></title>
-    <url>%2F2019%2F08%2F02%2Fpython%20(regex_either%20_expression)%2F</url>
-    <content type="text"><![CDATA[问题描述曾经要用正则表达式从.txt或者.dat文本中寻找mac的地址的办法目标数据 2a:3v:5g:3k:3d:6h或者2a-3v-5g-3k-3d-6h可能是由于是16进制，字母不允许大于f。英文字符无视大小写。 一开始的错误代码1`"[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2[:-](#)[a-fA-F0-9](#)2" `由于这个正则表达式能抓取一些错误的例子。 举例 输入: 2a-3v:5g-3k:3d:6h输出: 2a-3v:5g-3k:3d:6h会出现”:”与”-“混用的例子，这些是错误的例子。由于输出的顺序必须和文本出现的顺序一致，所以不能分开来查找，于是就做了如下的修改。 1`"(?:[a-fA-F0-9](#)2[:](#)[a-fA-F0-9](#)[:](#)[a-fA-F0-9](#)2[:](#)[a-fA-F0-9](#)2[:](#)[a-fA-F0-9](#)2[:](#)[a-fA-F0-9](#)2|[a-fA-F0-9](#)2[-](#)[a-fA-F0-9](#)[-](#)[a-fA-F0-9](#)2[-](#)[a-fA-F0-9](#)2[-](#)[a-fA-F0-9](#)2[-](#)[a-fA-F0-9](#)2)" `其中(? |-)表示的是两种只能有一种。要不就是全部：衔接的，要不就是全部-衔接的mac地址表达式。]]></content>
+    <title><![CDATA[Pyqt5 textbox中识别整数与小数无报错办法]]></title>
+    <url>%2F2019%2F08%2F02%2FPyqt5_whaterever_datatype%2F</url>
+    <content type="text"><![CDATA[要求对如下计算机进行编程。可以是任何输入，但只有整数或者小数，结果才有值。要求无论什么输入都不允许有报错。所以我就用了正则表达式来做。 在查看了calculator.io 转换而来的.py文件的时候 123456789101112`self.edtNumber1 = QtWidgets.QLineEdit(self.centralwidget)self.edtNumber1.setGeometry(QtCore.QRect(70, 50, 146, 27))self.edtNumber1.setObjectName("edtNumber1")self.edtNumber2 = QtWidgets.QLineEdit(self.centralwidget)self.edtNumber2.setGeometry(QtCore.QRect(360, 50, 146, 27))self.edtNumber2.setObjectName("edtNumber2")self.lblNumber1 = QtWidgets.QLabel(self.centralwidget)self.lblNumber1.setGeometry(QtCore.QRect(110, 30, 71, 17))self.lblNumber1.setObjectName("lblNumber1")self.lblNumber2 = QtWidgets.QLabel(self.centralwidget)self.lblNumber2.setGeometry(QtCore.QRect(400, 30, 71, 17))self.lblNumber2.setObjectName("lblNumber2") `得知self.edtNumber1为box1的输入，self.edtNumber2为box2的输入。以下是实现计算器的最终代码 12345678`pattern ='(?P\&lt;number\&gt;[+-] ?[0-9] *[.] [0-9] +)'match=re.search(pattern,self.edtNumber2.text())if match !=None and match["number"] == self.edtNumber2.text():number2 = float(match["number"] )pattern1 ='(?P\&lt;number\&gt;[+-] ?[0-9] +)'match1=re.search(pattern1,self.edtNumber2.text())if match == None and match1 != None and match1["number"] == self.edtNumber2.text():number2 = int(match1["number"] ) 一开始的想法因为要判断小数还是整数，所以先判断数据类型。但是因为用正则表达式的话，满足整数的表达式也能在小数中找到。所以要改变查找整数和小数的顺序。 举例：输入：12.78 12`pattern ='(?P\&lt;number\&gt;[+-] ?[0-9] *[.] [0-9] +)'match=re.search(pattern,self.edtNumber2.text()) `用着整数的正则先查找，匹配如下。输出：==12==.==78==12, 78显然，这是一个小数而不是整数。所以先判断小数，再根据非小数的结果判断是否有整数。所以就有了原先的判断语句。 if match == None and match1 != None： `来找到不符合小数却符合整数的类型。 但是出现了另一个问题就是该方法无法读取正确大的结果如果输入如下 举例1：输入：12.78De输出：==12.78==这不是我们想要的结果。于是就做了如下修改。 if match !=None and match[&quot;number&quot;]== self.edtNumber2.text() `除了满足正则表达式的例子外，不应该有其他任何字符。 举例2：输入：12.78Dematch“number” == 12.78self.edtNumber2.text() == 12.78De(match“number” == self.edtNumber2.text()) == False运用了这个方法后，就不再需要整数与小数先后的办法了。因为不是正确的数据类型的话，在第二个if条件就会出错。最后下面是完整代码 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657`import re import sys from PyQt5 import QtCore, QtGui from PyQt5.QtWidgets import QMainWindow, QApplication,QFileDialogfrom calculator import * class MathConsumer(QMainWindow, Ui_MainWindow):def __init__(self, parent=None): super(MathConsumer, self).__init__(parent) self.setupUi(self) self.btnCalculate.clicked.connect(self.calculate)# self.btnCalculate.clicked.connect(performOperation())# self.lblNumber1 =def calculate(self):number1 = 'E'number2 = 'E'# print(float(self.edtNumber1.text()))self.edtNumber1.text()pattern ='(?P\&lt;number\&gt;[+-]() ?[0-9]() *[.]() [0-9]() +)'match=re.search(pattern,self.edtNumber1.text())if match !=None and match["number"]() == self.edtNumber1.text():number1 = float(match["number"]() )pattern1 ='(?P\&lt;number\&gt;[+-]() ?[0-9]() +)'match1=re.search(pattern1,self.edtNumber1.text())if match == None and match1 != None and match1["number"]() == self.edtNumber1.text():number1 = int(match1["number"]() )pattern ='(?P\&lt;number\&gt;[+-]()?[0-9]() *[.]() [0-9]() +)'match=re.search(pattern,self.edtNumber2.text())if match !=None and match["number"]() == self.edtNumber2.text():number2 = float(match["number"]() )pattern1 ='(?P\&lt;number\&gt;[+-]() ?[0-9]() +)'match1=re.search(pattern1,self.edtNumber2.text())if match == None and match1 != None and match1["number"]() == self.edtNumber2.text():number2 = int(match1["number"]() )if number1 == 'E' or number2 == 'E':self.edtResult.setText("E")else:if self.cboOperation.currentText() == "+":self.edtResult.setText(str(number1 + number2))elif self.cboOperation.currentText() == "*":self.edtResult.setText(str(number1 * number2))elif self.cboOperation.currentText() == "-":self.edtResult.setText(str(number1 - number2))elif self.cboOperation.currentText() == "/":if number2 != 0 or number2 != 0.0:self.edtResult.setText(str(number1 / number2))else:self.edtResult.setText("E")if __name__ == "__main__":currentApp = QApplication(sys.argv)currentForm = MathConsumer()currentForm.show()currentApp.exec_() `]]></content>
       <categories>
         <category>Python Regex</category>
       </categories>
       <tags>
         <tag>Python</tag>
         <tag>正则表达式</tag>
+        <tag>Pyqt5</tag>
       </tags>
   </entry>
   <entry>
