@@ -27,16 +27,16 @@
 <meta property="og:site_name" content="Woodwind">
 <meta property="og:description" content="用SOC把MLP和CNN进行拆分成软硬件两部分，然后分别进行优化。硬件部分用FPGA对特定计算进行硬件加速，软件部分对特定代码配合硬件进行加速。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.c-jump.com/bcc/common/Talk2/Cxx/IEEE_754_fp_standard/const_images/ieee.gif">
+<meta property="og:image" content="https://res.cloudinary.com/db6zr5nzu/image/upload/v1641947626/ieee_d88ezn.gif">
 <meta property="og:image" content="https://res.cloudinary.com/db6zr5nzu/image/upload/v1640737841/Picture1_ya3bi2.png">
 <meta property="article:published_time" content="2021-12-24T20:03:15.000Z">
-<meta property="article:modified_time" content="2021-12-29T10:09:51.616Z">
+<meta property="article:modified_time" content="2022-01-12T00:34:29.915Z">
 <meta property="article:author" content="Woodwind">
 <meta property="article:tag" content="verilog">
 <meta property="article:tag" content="SOC">
 <meta property="article:tag" content="accelerator - hardware&#x2F;software partition">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.c-jump.com/bcc/common/Talk2/Cxx/IEEE_754_fp_standard/const_images/ieee.gif">
+<meta name="twitter:image" content="https://res.cloudinary.com/db6zr5nzu/image/upload/v1641947626/ieee_d88ezn.gif">
 
 <link rel="canonical" href="http://example.com/2021/12/24/soc/">
 
@@ -222,7 +222,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-29 05:09:51" itemprop="dateModified" datetime="2021-12-29T05:09:51-05:00">2021-12-29</time>
+                <time title="修改时间：2022-01-11 19:34:29" itemprop="dateModified" datetime="2022-01-11T19:34:29-05:00">2022-01-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -281,7 +281,7 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">float</span> <span class="title">kad_sdot</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">const</span> <span class="keyword">float</span> *x, <span class="keyword">const</span> <span class="keyword">float</span> *y)</span> <span class="comment">/* BLAS sdot */</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">float</span> s = <span class="number">0.</span>;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; ++i) s += x[i] * y[i];</span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">kad_saxpy_inlined</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">float</span> a, <span class="keyword">const</span> <span class="keyword">float</span> *x, <span class="keyword">float</span> *y)</span> <span class="comment">// BLAS saxpy</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; ++i) y[i] += a * x[i];</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">kad_vec_mul_sum</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">float</span> *a, <span class="keyword">const</span> <span class="keyword">float</span> *b, <span class="keyword">const</span> <span class="keyword">float</span> *c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; ++i) a[i] += b[i] * c[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>根据以上代码，发现运用了大量的累加和乘法。根据硬件高并行的特点，浮点乘法可以有非常好的表现，浮点加法其次。</p>
 <p>综上所述，开始编写浮点乘法和浮点加法的硬件。</p>
-<h3 id="硬件代码"><a href="#硬件代码" class="headerlink" title="硬件代码"></a>硬件代码</h3><h4 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h4><p><img src="http://www.c-jump.com/bcc/common/Talk2/Cxx/IEEE_754_fp_standard/const_images/ieee.gif"><br>因为用的是IEEE-754标准的浮点数如图。标准为[1，8，23]，即一位符号位s，八位“指数”（e-127），二十三位小数m组成。</p>
+<h3 id="硬件代码"><a href="#硬件代码" class="headerlink" title="硬件代码"></a>硬件代码</h3><h4 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h4><p><img src="https://res.cloudinary.com/db6zr5nzu/image/upload/v1641947626/ieee_d88ezn.gif"><br>因为用的是IEEE-754标准的浮点数如图。标准为[1，8，23]，即一位符号位s，八位“指数”（e-127），二十三位小数m组成。</p>
 <p><img src="https://res.cloudinary.com/db6zr5nzu/image/upload/v1640737841/Picture1_ya3bi2.png"><br>上图为Fadd 浮点数加法的大致结构图。</p>
 <p>浮点数的运算浮点加法较为复杂，由三个主要部分组成。allignment, calculation和normalization。</p>
 <h5 id="1-allignment"><a href="#1-allignment" class="headerlink" title="1 allignment"></a>1 allignment</h5><p>在allignment阶段需要让两个加数处于同一个指数进行计算。所以需要比较两个加数的指数大小，小的加数需要右移指数差。同时m仅仅表示了小数部分，所以需要给两个数补一位最高位，同时赋值1。代码如下。</p>
@@ -362,7 +362,10 @@
     <a href="/2021/06/16/danmuji/" rel="prev" title="B站自动回复弹幕机">
       <i class="fa fa-chevron-left"></i> B站自动回复弹幕机
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/01/07/cache/" rel="next" title="cache">
+      cache <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -436,20 +439,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">22</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">34</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -488,7 +491,7 @@
 <div class="copyright">
   
   &copy; 2018 – 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -498,7 +501,7 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">74k</span>
+    <span title="站点总字数">75k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
