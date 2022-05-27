@@ -33,62 +33,6 @@
     
     
     <entry>
-      <title>架构：先知/批评家分支预测器</title>
-      <link href="/2022/01/26/branchPredictor/"/>
-      <url>/2022/01/26/branchPredictor/</url>
-      
-        <content type="html"><![CDATA[<h3 id="分支预测简介"><a href="#分支预测简介" class="headerlink" title="分支预测简介"></a>分支预测简介</h3><p>分支预测是CPU架构中处理分支一个非常实用的技巧。因为在如今高流水的计算机架构下，如果在分支结果没有得出前，整个后续的流水线都会阻塞。所以在结果真正计算出前，我们可以预测分支结果，执行预测结果的分支。如果预测正确，则完美省去了等待分支结果计算出来的时间。如果预测失败，则需要回滚之前错误分支执行的指令，但是这本身并没有性能上的损失。分支的预测率就决定了当前使用的分支预测器的性能。</p><h4 id="如何预测分支结果"><a href="#如何预测分支结果" class="headerlink" title="如何预测分支结果"></a>如何预测分支结果</h4><p>分支的结果可以根据静态预测或动态预测。静态预测根据预先储存的表格判断应该输出什么。而动态预测则能在预先储存的表格的基础上，根据每个分支的情况修正输出结果。具体的结构如下图：<br><img src="https://res.cloudinary.com/db6zr5nzu/image/upload/v1643246281/R.5c062b5839bba54cf19ae4d565649026_smvrpy.png"></p><h3 id="不同的预测分支"><a href="#不同的预测分支" class="headerlink" title="不同的预测分支"></a>不同的预测分支</h3><h3 id="prophet-critic分支预测器简介"><a href="#prophet-critic分支预测器简介" class="headerlink" title="prophet/critic分支预测器简介"></a>prophet/critic分支预测器简介</h3><p>先知/批评家分支预测器是由两个分支预测器组成的。一个是先知分支预测器，他根据历史结果做出判断，另一个是批评家分支预测器，他根据先知预测器输出的结果作为输入得出未来的结果。所以这两个分支预测器的关系是串联。和传统的混合分支预测器（hybrid predictor）和覆盖分支预测器（overriding predictor不同，不像混合分支预测器，两个预测器在同时预测，然后由仲裁器决定结果。也不像覆盖分支预测器一样，在流水线的不同阶段启动分支预测器。批评家根据新生成的先知预测结果进行预测，因为可以得到不同时间的不同信息，所以额外生成的未来信息能极大的提升预测正确率。<br><img src="https://res.cloudinary.com/db6zr5nzu/image/upload/v1643248090/Picture3_hpa8rh.png"></p><h3 id="prophet-critic-与传统分支预测对比图"><a href="#prophet-critic-与传统分支预测对比图" class="headerlink" title="prophet/critic 与传统分支预测对比图"></a>prophet/critic 与传统分支预测对比图</h3><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p>Falcon, A et al.“Better Branch Prediction through Prophet/critic Hybrids.” IEEE        MICRO 25.1  &emsp;&emsp; (2005): 80–89. Web.</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Project </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> c++ </tag>
-            
-            <tag> accelerator </tag>
-            
-            <tag> branch predictor </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>cache</title>
-      <link href="/2022/01/07/cache.md(temp)/"/>
-      <url>/2022/01/07/cache.md(temp)/</url>
-      
-        <content type="html"><![CDATA[<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><h4 id="cache介绍"><a href="#cache介绍" class="headerlink" title="cache介绍"></a>cache介绍</h4><p>硬件储存元件的特点：储存越大导致速度越慢，同时价格越便宜。因为部分访问的数据具有局部性（locality），所以把常访问的数据放进更小更快的储存单元，能降低成本的同时不损失速度。<br><img src="https://res.cloudinary.com/db6zr5nzu/image/upload/v1641580467/PIC2_x5elrq.png"></p><h4 id="locality介绍"><a href="#locality介绍" class="headerlink" title="locality介绍"></a>locality介绍</h4><p>locality分为两种，空间局部性（spatial locality）和时间局部性temporal locality。空间局部性代表的是最近使用的数据和正在使用的数据在空间是临近的，所以cache可以在每次读取数据的时候以一个block为单位把附近的数据同时打包传送。时间局部性代表的是最近使用的数据在近期会再次访问，所以cache可以每次把需要读取的数据传入cache。</p><h4 id="cache-miss介绍"><a href="#cache-miss介绍" class="headerlink" title="cache miss介绍"></a>cache miss介绍</h4><p>cache miss是指当需要从cache取数据，但数据不在cache的事件。cache miss有三种类型：compulsory miss，conflict miss和capacity miss。</p><p>conflict miss: 当多个block映射到同一个cache block。<br><img src="https://www.cs.swarthmore.edu/~kwebb/cs31/f18/memhierarchy/figures/DirectExample1.png"><br>compulsory  miss: 当block第一次传入cache时发生。<br>capacity  miss: 当cache太小，原来存在于cache的数据因为容量大小被新的数据替代导致。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> cache </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> architecture </tag>
-            
-            <tag> cache </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>MLP和CNN SOC 加速器</title>
       <link href="/2021/12/24/soc/"/>
       <url>/2021/12/24/soc/</url>
